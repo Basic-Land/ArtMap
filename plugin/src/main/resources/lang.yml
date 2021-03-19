@@ -85,7 +85,7 @@ MENU_RECIPE: "Choose a Recipe"
 MENU_ARTIST: "Click an Artist"
 MENU_ARTWORKS: "%s's Art" # '%s' will be replaced by the player's name
 MENU_ARTWORK: "Artwork %s"
-RECIPE_HEADER: "Recipe for §a[%s]"
+RECIPE_HEADER: "Recipe for §2[%s]"
 MENU_DYES: "Dyes for painting"
 MENU_HELP: "Choose a help topic"
 MENU_TOOLS: "Hover for usage" #Hover over a tool to view how it is used
