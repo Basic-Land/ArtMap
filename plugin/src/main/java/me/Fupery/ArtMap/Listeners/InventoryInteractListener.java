@@ -73,11 +73,11 @@ class InventoryInteractListener implements RegisteredListener {
 
 	private void checkArtKitPagination(Player player, ItemStack itemStack, Cancellable event) {
 		if (ArtMap.instance().getArtistHandler().containsPlayer(player)) {
-			if (ItemUtils.hasKey(itemStack, "Artkit:Next")) {
+			if (ItemUtils.hasKey(itemStack, "§8[ArtKit:Next]")) {
 				event.setCancelled(true);
 				ArtMap.instance().getArtistHandler().getCurrentSession(player).nextKitPage(player);
 			}
-			if (ItemUtils.hasKey(itemStack, "Artkit:Back")) {
+			if (ItemUtils.hasKey(itemStack, "§8[ArtKit:Back]")) {
 				event.setCancelled(true);
 				ArtMap.instance().getArtistHandler().getCurrentSession(player).prevKitPage(player);
 			}
@@ -86,8 +86,8 @@ class InventoryInteractListener implements RegisteredListener {
 
     private boolean isKitDrop(Player player, ItemStack itemStack) {
         if (ArtMap.instance().getArtistHandler().containsPlayer(player)) {
-			if (ItemUtils.hasKey(itemStack, ArtItem.KIT_KEY) || ItemUtils.hasKey(itemStack, "Artkit:Next")
-					|| ItemUtils.hasKey(itemStack, "Artkit:Back")) {
+			if (ItemUtils.hasKey(itemStack, ArtItem.KIT_KEY) || ItemUtils.hasKey(itemStack, "§8[ArtKit:Next]")
+					|| ItemUtils.hasKey(itemStack, "§8[ArtKit:Back]")) {
 				return true;
 			}
         }
