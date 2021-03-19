@@ -19,6 +19,7 @@ public class Configuration {
     public final long	 HEAD_PREFETCH_DELAY;
     public final long    HEAD_PREFETCH_PERIOD;
     public final boolean HEAD_FETCH_MOJANG;
+    public final boolean ENABLE_RECIPES;
     public final int     INK_USES;
     public final boolean LIMITED_INK_USES;
 
@@ -39,6 +40,7 @@ public class Configuration {
         this.HEAD_PREFETCH_DELAY = configuration.getLong("headPrefetchDelay", 0L);
         this.HEAD_PREFETCH_PERIOD = configuration.getLong("headPrefetchPeriod", 10000L);
         this.HEAD_FETCH_MOJANG = configuration.getBoolean("headFetchMojang", true);
+	this.ENABLE_RECIPES = configuration.getBoolean("enableRecipes");
         this.INK_USES = configuration.getInt("inkUses");
         this.LIMITED_INK_USES = INK_USES > 0;
     }
