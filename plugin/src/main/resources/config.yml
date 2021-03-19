@@ -42,5 +42,8 @@ headPrefetchDelay: 0
 #Head prefetch period - Delay between non cached head retrievals.  This prevents artmap from hitting mojang api limits.
 headPrefetchPeriod: 10000
 
+#Enables or disables recipes
+enableRecipes: true
+
 #Import delay (default is 100ms which is 10 artworks second)
 importDelay: 250
