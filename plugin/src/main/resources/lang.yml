@@ -80,14 +80,14 @@ SEARCH_BY: " by " #spaces before and after matter
 
 #---------------------------------------[Help menu]---------------------------------------#
 #Menu titles
-MENU_HEADER: "[Art]"  #This can be changed but must exist and be unique or the menus will break.
+MENU_HEADER: " "  #This can be changed but must exist and be unique or the menus will break.
 MENU_RECIPE: "Choose a Recipe"
 MENU_ARTIST: "Click an Artist"
 MENU_ARTWORKS: "%s's Art" # '%s' will be replaced by the player's name
 MENU_ARTWORK: "Artwork %s"
 RECIPE_HEADER: "Recipe for §2[%s]"
 MENU_DYES: "Dyes for painting"
-MENU_HELP: "Choose a help topic"
+MENU_HELP: "       Choose a help topic"
 MENU_TOOLS: "Hover for usage" #Hover over a tool to view how it is used
 MENU_DELETE: "Confirm Delete"
 
@@ -119,15 +119,15 @@ ITEM_NAME_COAL: "§e•§6§lShade§e•"
 ITEM_NAKE_FEATHER: "Feather"
 ITEM_NAME_SPONGE: "§e•§6§lEyedropper§e•"
 ITEM_SPONGE_MESSAGE: "Picked up Dye colour"
-ARTKIT_NEXT: "Next"
-ARTKIT_PREV: "Prev"
+ARTKIT_NEXT: "§c§l➡"
+ARTKIT_PREV: "§c§l⬅"
 #---------------------------------------[Menu Buttons]---------------------------------------#
 HELP_GETTING_STARTED:
   - "§6§l⊱§e§lGetting Started§6§l⊰"
   - "§3❉§b§oWelcome to ArtMap!§3❉"
   - ""
   - "§a1§2. §7Craft yourself an §6Easel,"
-  - "    §6Canvas, §7 and §6Paint Brush §7."
+  - "   §6Canvas, §7 and §6Paint Brush §7."
   - "§a2§2. §7Place the Easel and use your Canvas §7on it."
   - "§a3§2. §7Click the Canvas with §2Dyes §7&" 
   - "   §3Tools §7to paint."
