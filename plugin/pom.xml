@@ -2,11 +2,11 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ArtMap</artifactId>
+	<artifactId>bArtMap</artifactId>
 	<description>Make pixel art!</description>
 	<parent>
 		<groupId>com.gitlab.blockstack</groupId>
-		<artifactId>ArtMap-parent</artifactId>
+		<artifactId>bArtMap-parent</artifactId>
 		<version>3.8.1</version>
 		<relativePath>..</relativePath>
 	</parent>
