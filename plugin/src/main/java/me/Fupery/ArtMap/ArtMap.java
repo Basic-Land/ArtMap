@@ -184,7 +184,7 @@ public class ArtMap extends JavaPlugin implements IArtMap {
 				getPluginLoader().disablePlugin(this);
 				return;
 			}
-			if (!recipesLoaded) {
+			if (!recipesLoaded && config.ENABLE_RECIPES) {
 				recipeLoader = new RecipeLoader(this, config);
 				recipeLoader.loadRecipes();
 				recipesLoaded = true;
