@@ -88,6 +88,8 @@ public class ArtSession implements IArtSession {
 			// ale stejně je v creativu tak si může dát ten potion znovu
 			player.addPotionEffect(
 					new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1000000, 127, false, false, false), true);
+			player.addPotionEffect(
+					new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1000000, 127, false, false, false), true);
 			gmstatus = GameMode.CREATIVE;
 		}
 		if (!seated) {
@@ -235,6 +237,7 @@ public class ArtSession implements IArtSession {
 			active = false;
 			if (gmstatus == GameMode.CREATIVE) {
 				player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+				player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
 				player.setGameMode(GameMode.CREATIVE);
 			}
 		} catch (Exception e) {
