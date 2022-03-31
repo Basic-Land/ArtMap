@@ -1,11 +1,10 @@
 package me.Fupery.ArtMap.Menu.API;
 
+import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
+import me.Fupery.ArtMap.Menu.Handler.CacheableMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
-
-import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
-import me.Fupery.ArtMap.Menu.Handler.CacheableMenu;
 
 public abstract class BasicMenu extends CacheableMenu {
 
@@ -13,9 +12,9 @@ public abstract class BasicMenu extends CacheableMenu {
         super(heading, type);
     }
 
-	protected BasicMenu(String heading, MenuType type) {
-		super(heading, type);
-	}
+    protected BasicMenu(String heading, MenuType type) {
+        super(heading, type);
+    }
 
     @Override
     public void onMenuOpenEvent(Player viewer) {

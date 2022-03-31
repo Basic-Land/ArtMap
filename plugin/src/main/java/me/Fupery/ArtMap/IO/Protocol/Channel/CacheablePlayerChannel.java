@@ -1,11 +1,10 @@
 package me.Fupery.ArtMap.IO.Protocol.Channel;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-
 import io.netty.channel.Channel;
 import me.Fupery.ArtMap.ArtMap;
+import org.bukkit.Bukkit;
+
+import java.util.UUID;
 
 class CacheablePlayerChannel {
 

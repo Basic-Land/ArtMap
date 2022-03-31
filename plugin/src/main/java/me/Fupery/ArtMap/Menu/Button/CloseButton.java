@@ -1,13 +1,12 @@
 package me.Fupery.ArtMap.Menu.Button;
 
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Menu.API.SoundCompat;
+import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Menu.API.SoundCompat;
-import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
 
 public class CloseButton extends Button {
 

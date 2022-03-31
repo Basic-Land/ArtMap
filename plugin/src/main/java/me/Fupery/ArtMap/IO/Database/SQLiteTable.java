@@ -1,13 +1,9 @@
 package me.Fupery.ArtMap.IO.Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-
 import me.Fupery.ArtMap.ArtMap;
+
+import java.sql.*;
+import java.util.logging.Level;
 
 public class SQLiteTable {
     protected static final String sqlError = "Database error,";
@@ -45,7 +41,7 @@ public class SQLiteTable {
                 prepare(statement);
                 result = statement.executeBatch();
             } catch (SQLException e) {
-				throw e;
+                throw e;
             } finally {
                 close(connection, statement);
                 manager.getLock().unlock();
@@ -54,12 +50,12 @@ public class SQLiteTable {
         }
 
         @Override
-		protected Void read(ResultSet set) throws SQLException {
+        protected Void read(ResultSet set) throws SQLException {
             return null;
         }
 
         @Override
-		public Void execute(String query) throws SQLException {
+        public Void execute(String query) throws SQLException {
             Connection connection = null;
             PreparedStatement statement = null;
 

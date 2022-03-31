@@ -1,17 +1,6 @@
 package me.Fupery.ArtMap.Menu.HelpMenu;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
 import me.Fupery.ArtMap.Menu.API.BasicMenu;
 import me.Fupery.ArtMap.Menu.API.ChildMenu;
 import me.Fupery.ArtMap.Menu.API.MenuType;
@@ -21,6 +10,16 @@ import me.Fupery.ArtMap.Menu.Button.StaticButton;
 import me.Fupery.ArtMap.Menu.Handler.CacheableMenu;
 import me.Fupery.ArtMap.Recipe.ArtMaterial;
 import me.Fupery.ArtMap.Utils.ItemUtils;
+import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class RecipeMenu extends BasicMenu implements ChildMenu {
 
@@ -29,29 +28,29 @@ public class RecipeMenu extends BasicMenu implements ChildMenu {
     private boolean adminMenu;
 
     public RecipeMenu(boolean adminMenu) {
-		super(ChatColor.DARK_BLUE + Lang.MenuTitle.MENU_RECIPE.get(), new MenuType(9));
+        super(ChatColor.DARK_BLUE + Lang.MenuTitle.MENU_RECIPE.get(), new MenuType(9));
         this.adminMenu = adminMenu;
     }
 
     @Override
     public Future<Button[]> getButtons() {
-        String[] back = { ChatColor.RED.toString() + ChatColor.BOLD + LEFT_ARROW };
-        if(ArtMap.instance().getConfiguration().DISABLE_PAINTBRUSH) {
-            return CompletableFuture.completedFuture(new Button[] {
-                new LinkedButton(ArtMap.instance().getMenuHandler().MENU.HELP, Material.MAGENTA_GLAZED_TERRACOTTA, back), 
-                new StaticButton(Material.AIR),
-                new StaticButton(ArtMap.instance().getBukkitVersion().getVersion().getSign(), Lang.Array.INFO_RECIPES.get()),
-                new RecipeButton(ArtMaterial.EASEL),
-                new RecipeButton(ArtMaterial.CANVAS),
+        String[] back = {ChatColor.RED.toString() + ChatColor.BOLD + LEFT_ARROW};
+        if (ArtMap.instance().getConfiguration().DISABLE_PAINTBRUSH) {
+            return CompletableFuture.completedFuture(new Button[]{
+                    new LinkedButton(ArtMap.instance().getMenuHandler().MENU.HELP, Material.MAGENTA_GLAZED_TERRACOTTA, back),
+                    new StaticButton(Material.AIR),
+                    new StaticButton(ArtMap.instance().getBukkitVersion().getVersion().getSign(), Lang.Array.INFO_RECIPES.get()),
+                    new RecipeButton(ArtMaterial.EASEL),
+                    new RecipeButton(ArtMaterial.CANVAS),
             });
         } else {
-            return CompletableFuture.completedFuture(new Button[] {
-                new LinkedButton(ArtMap.instance().getMenuHandler().MENU.HELP, Material.MAGENTA_GLAZED_TERRACOTTA, back), 
-                new StaticButton(Material.AIR),
-                new StaticButton(ArtMap.instance().getBukkitVersion().getVersion().getSign(), Lang.Array.INFO_RECIPES.get()),
-                new RecipeButton(ArtMaterial.EASEL),
-                new RecipeButton(ArtMaterial.CANVAS),
-                new RecipeButton(ArtMaterial.PAINT_BRUSH),
+            return CompletableFuture.completedFuture(new Button[]{
+                    new LinkedButton(ArtMap.instance().getMenuHandler().MENU.HELP, Material.MAGENTA_GLAZED_TERRACOTTA, back),
+                    new StaticButton(Material.AIR),
+                    new StaticButton(ArtMap.instance().getBukkitVersion().getVersion().getSign(), Lang.Array.INFO_RECIPES.get()),
+                    new RecipeButton(ArtMaterial.EASEL),
+                    new RecipeButton(ArtMaterial.CANVAS),
+                    new RecipeButton(ArtMaterial.PAINT_BRUSH),
             });
         }
     }
@@ -71,8 +70,8 @@ public class RecipeMenu extends BasicMenu implements ChildMenu {
             this.recipe = material;
             ItemMeta meta = material.getItem().getItemMeta();
             List<String> lore = meta.getLore();
-			lore.add("");
-			lore.add(ChatColor.GREEN + Lang.RECIPE_BUTTON.get());
+            lore.add("");
+            lore.add(ChatColor.GREEN + Lang.RECIPE_BUTTON.get());
             if (adminMenu) lore.add(lore.size(), ChatColor.GOLD + Lang.ADMIN_RECIPE.get());
             meta.setLore(lore);
             setItemMeta(meta);

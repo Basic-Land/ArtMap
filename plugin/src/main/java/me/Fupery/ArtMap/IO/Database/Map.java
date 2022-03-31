@@ -1,19 +1,18 @@
 package me.Fupery.ArtMap.IO.Database;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Arrays;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.IO.CompressedMap;
+import me.Fupery.ArtMap.Painting.GenericMapRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.IO.CompressedMap;
-import me.Fupery.ArtMap.Painting.GenericMapRenderer;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Map {
 
@@ -81,22 +80,22 @@ public class Map {
     }
 
     public MapView getMap() {
-        if(this.mapView == null) {
+        if (this.mapView == null) {
             this.mapView = ArtMap.getMap(this.mapId);
         }
         return this.mapView;
-    }
-
-    public void clear() throws NoSuchFieldException, IllegalAccessException {
-        setMap(BLANK_MAP,false);
     }
 
     public void setMap(byte[] map) throws NoSuchFieldException, IllegalAccessException {
         setMap(map, true);
     }
 
+    public void clear() throws NoSuchFieldException, IllegalAccessException {
+        setMap(BLANK_MAP, false);
+    }
+
     public void setMap(byte[] map, boolean updateRenderer) throws NoSuchFieldException, IllegalAccessException {
-        if(this.mapView == null) {
+        if (this.mapView == null) {
             getMap();
         }
         ArtMap.instance().getReflection().setWorldMap(mapView, map);

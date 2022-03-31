@@ -2,10 +2,9 @@ package me.Fupery.ArtMap.IO;
 
 import me.Fupery.DataTables.DataTables;
 import me.Fupery.DataTables.PixelTable;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
-
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class PixelTableManager {
     private int resolutionFactor;

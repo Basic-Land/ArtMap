@@ -15,9 +15,8 @@ import java.util.logging.Level;
 
 public class GenericPacketReceiver extends PacketReceiver {
 
-    private final Map<UUID, Channel> channelLookup = new MapMaker().weakValues().makeMap();
-
     private static final String handlerName = "ArtMapHandler";
+    private final Map<UUID, Channel> channelLookup = new MapMaker().weakValues().makeMap();
 
     @Override
     public void injectPlayer(Player player) throws ReflectiveOperationException {
@@ -51,7 +50,7 @@ public class GenericPacketReceiver extends PacketReceiver {
                 });
             }
         } catch (Exception e) {
-            ArtMap.instance().getLogger().log(Level.SEVERE,"Error unbinding player channel!",e);
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Error unbinding player channel!", e);
         }
         channelLookup.remove(player.getUniqueId());
     }

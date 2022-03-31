@@ -1,15 +1,15 @@
 package me.Fupery.ArtMap.api.Utils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 
 public class VersionHandler {
-    private final BukkitVersion version;
     private static JavaPlugin plugin;
+    private final BukkitVersion version;
 
     public VersionHandler(JavaPlugin plugin) {
         this.version = checkVersion();
@@ -29,8 +29,8 @@ public class VersionHandler {
         if (version.isLessThan(1, 14)) return BukkitVersion.v1_13;
         else if (version.isLessThan(1, 15)) return BukkitVersion.v1_14;
         else if (version.isLessThan(1, 16)) return BukkitVersion.v1_15;
-		else
-			return BukkitVersion.v1_16;
+        else
+            return BukkitVersion.v1_16;
     }
 
     public static BukkitVersion getLatest() {
@@ -48,7 +48,7 @@ public class VersionHandler {
     }
 
     public enum BukkitVersion {
-		UNKNOWN, v1_13, v1_14, v1_15, v1_16;
+        UNKNOWN, v1_13, v1_14, v1_15, v1_16;
 
         public boolean isGreaterThan(BukkitVersion version) {
             return ordinal() > version.ordinal();
@@ -97,11 +97,11 @@ public class VersionHandler {
 
         public Material getWallSign() {
             String matName = "OAK_WALL_SIGN";
-            if( this.isEqualTo(BukkitVersion.v1_13)) {
+            if (this.isEqualTo(BukkitVersion.v1_13)) {
                 matName = "WALL_SIGN";
-            } 
+            }
             Material mat = Material.getMaterial(matName, false);
-            if(mat == null) {
+            if (mat == null) {
                 plugin.getLogger().warning("Failed to get wall sign material! :: " + matName);
                 mat = Material.BEDROCK;
             }
@@ -110,11 +110,11 @@ public class VersionHandler {
 
         public Material getSign() {
             String matName = "OAK_SIGN";
-            if( this.isEqualTo(BukkitVersion.v1_13)) {
+            if (this.isEqualTo(BukkitVersion.v1_13)) {
                 matName = "SIGN";
-            } 
+            }
             Material mat = Material.getMaterial(matName, false);
-            if(mat == null) {
+            if (mat == null) {
                 plugin.getLogger().warning("Failed to get sign material! :: " + matName);
                 mat = Material.BEDROCK;
             }

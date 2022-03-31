@@ -5,5 +5,5 @@ import org.bukkit.event.Listener;
 public interface EventListener extends CompatibilityHandler, Listener {
 
     public void unregister();
-    
+
 }

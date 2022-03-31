@@ -1,9 +1,8 @@
 package me.Fupery.ArtMap.api.Colour;
 
+import me.Fupery.ArtMap.api.Painting.Pixel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-
-import me.Fupery.ArtMap.api.Painting.Pixel;
 
 public class ShadingDye extends ArtDye {
 
@@ -20,10 +19,10 @@ public class ShadingDye extends ArtDye {
     }
 
     @Override
-	public byte getDyeColour(final byte currentPixelColour) {
-		int current = (currentPixelColour & 0xFF); // convert back to int representation from signed byte
-		int shade = current % 4; // 0-3
-		int shift;
+    public byte getDyeColour(final byte currentPixelColour) {
+        int current = (currentPixelColour & 0xFF); // convert back to int representation from signed byte
+        int shade = current % 4; // 0-3
+        int shift;
 
         if (darken) {
             if (shade > 0 && shade < 3) {
@@ -42,12 +41,12 @@ public class ShadingDye extends ArtDye {
                 return currentPixelColour;
             }
         }
-		/*
-		 * ArtMap.instance().getLogger().info("Current color=" + current +
-		 * " Current shade=" + shade + " Shift=" + shift + "New Color=" + (byte)
-		 * (current + shift));
-		 */
-		return (byte) (current + shift);
+        /*
+         * ArtMap.instance().getLogger().info("Current color=" + current +
+         * " Current shade=" + shade + " Shift=" + shift + "New Color=" + (byte)
+         * (current + shift));
+         */
+        return (byte) (current + shift);
     }
 
     @Override
@@ -57,10 +56,10 @@ public class ShadingDye extends ArtDye {
         return dye.darken == darken;
     }
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     @Override
     public byte getColour() {

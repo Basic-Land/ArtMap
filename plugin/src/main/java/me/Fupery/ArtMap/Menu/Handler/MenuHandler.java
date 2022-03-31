@@ -6,7 +6,6 @@ import me.Fupery.ArtMap.Menu.Event.MenuFactory;
 import me.Fupery.ArtMap.Menu.Event.MenuListener;
 import me.Fupery.ArtMap.Menu.HelpMenu.*;
 import me.Fupery.ArtMap.api.Config.Lang;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -18,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class MenuHandler {
     public final MenuList MENU = new MenuList();
     private final ConcurrentHashMap<UUID, CacheableMenu> openMenus = new ConcurrentHashMap<>();
-    
+
     public MenuHandler(JavaPlugin plugin) {
         new MenuListener(this, plugin);
     }
@@ -34,7 +33,7 @@ public final class MenuHandler {
         } else {
             viewer.closeInventory();//todo check if this works
         }
-        openMenus.put(viewer.getUniqueId(),menu);
+        openMenus.put(viewer.getUniqueId(), menu);
         menu.open(viewer);
     }
 
@@ -51,7 +50,7 @@ public final class MenuHandler {
     public void closeMenu(Player viewer, MenuCloseReason reason) {
         if (!isTrackingPlayer(viewer)) return;
         CacheableMenu menu = openMenus.get(viewer.getUniqueId());
-        if(menu != null) {
+        if (menu != null) {
             menu.close(viewer, reason);
         }
         if (menu instanceof ChildMenu && reason == MenuCloseReason.BACK) {

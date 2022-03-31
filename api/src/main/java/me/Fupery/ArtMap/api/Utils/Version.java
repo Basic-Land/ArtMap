@@ -1,9 +1,9 @@
 package me.Fupery.ArtMap.api.Utils;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Arrays;
 
 /**
  * Version handles the minor changes between different MC versions.
@@ -14,20 +14,20 @@ public class Version implements Comparable<Version> {
 
     public Version(Plugin plugin) {
         String[] strings = plugin.getDescription().getVersion().split("\\.");
-        
+
         int[] numbers = new int[strings.length];
         for (int i = 0; i < strings.length; i++) {
             //chop anything like -SNAPSHOT off the version number.
             String str = strings[i];
-            if(str.contains("-")) {
+            if (str.contains("-")) {
                 str = str.substring(0, str.indexOf('-'));
             }
             //also wierdness like version: "7.0.0;02b731f"
-            if(str.contains(";")) {
+            if (str.contains(";")) {
                 str = str.substring(0, str.indexOf(';'));
             }
             //and this "7.0.4+f7ff984"
-            if(str.contains("+")) {
+            if (str.contains("+")) {
                 str = str.substring(0, str.indexOf('+'));
             }
             numbers[i] = Integer.parseInt(str);
@@ -46,6 +46,7 @@ public class Version implements Comparable<Version> {
 
     /**
      * Debug method! Use the no argument method.
+     *
      * @param bukkit The Bukkit version string.
      * @return Version Version specific wrapper.
      */
@@ -73,12 +74,12 @@ public class Version implements Comparable<Version> {
 
     @Override
     public boolean equals(Object ver) {
-        if(!(ver instanceof Version)) {
+        if (!(ver instanceof Version)) {
             return false;
         }
         Version cVer = (Version) ver;
         return cVer.isEqualTo(this.numbers);
-        
+
     }
 
     @Override

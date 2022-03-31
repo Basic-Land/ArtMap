@@ -1,26 +1,25 @@
 package me.Fupery.ArtMap.api.Config;
 
-import org.bukkit.configuration.file.FileConfiguration;
-
 import me.Fupery.ArtMap.api.IArtMap;
+import org.bukkit.configuration.file.FileConfiguration;
 
 
 public class Configuration {
-    public final String  LANGUAGE;
-    public final String  WORLD;
-    public final int     ARTWORK_AUTO_SAVE;
+    public final String LANGUAGE;
+    public final String WORLD;
+    public final int ARTWORK_AUTO_SAVE;
     public final boolean SWEAR_FILTER;
     public final boolean DISABLE_ACTION_BAR;
     public final boolean CUSTOM_RECIPES;
     public final boolean FORCE_ART_KIT;
     public final boolean FORCE_GUI;
     public final boolean DISABLE_PAINTBRUSH;
-	public final boolean HEAD_PREFETCH;
-    public final long	 HEAD_PREFETCH_DELAY;
-    public final long    HEAD_PREFETCH_PERIOD;
+    public final boolean HEAD_PREFETCH;
+    public final long HEAD_PREFETCH_DELAY;
+    public final long HEAD_PREFETCH_PERIOD;
     public final boolean HEAD_FETCH_MOJANG;
     public final boolean ENABLE_RECIPES;
-    public final int     INK_USES;
+    public final int INK_USES;
     public final boolean LIMITED_INK_USES;
 
     public Configuration(IArtMap plugin) {
@@ -35,12 +34,12 @@ public class Configuration {
         this.CUSTOM_RECIPES = configuration.getBoolean("customRecipes");
         this.FORCE_ART_KIT = configuration.getBoolean("forceArtKit");
         this.DISABLE_PAINTBRUSH = configuration.getBoolean("disablePaintbrush");
-		this.FORCE_GUI = configuration.getBoolean("guiOnly", false);
-		this.HEAD_PREFETCH = configuration.getBoolean("headPrefetch", true);
+        this.FORCE_GUI = configuration.getBoolean("guiOnly", false);
+        this.HEAD_PREFETCH = configuration.getBoolean("headPrefetch", true);
         this.HEAD_PREFETCH_DELAY = configuration.getLong("headPrefetchDelay", 0L);
         this.HEAD_PREFETCH_PERIOD = configuration.getLong("headPrefetchPeriod", 10000L);
         this.HEAD_FETCH_MOJANG = configuration.getBoolean("headFetchMojang", true);
-	this.ENABLE_RECIPES = configuration.getBoolean("enableRecipes");
+        this.ENABLE_RECIPES = configuration.getBoolean("enableRecipes");
         this.INK_USES = configuration.getInt("inkUses");
         this.LIMITED_INK_USES = INK_USES > 0;
     }

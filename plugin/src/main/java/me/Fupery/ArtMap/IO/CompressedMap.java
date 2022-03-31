@@ -1,13 +1,12 @@
 package me.Fupery.ArtMap.IO;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-import org.bukkit.map.MapView;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.IO.ColourMap.f32x32;
 import me.Fupery.ArtMap.IO.Database.Map;
+import org.bukkit.map.MapView;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class CompressedMap extends MapId {
     private byte[] compressedMap;
@@ -18,7 +17,7 @@ public class CompressedMap extends MapId {
     }
 
     public static CompressedMap compress(MapView mapView) throws IOException {
-		return compress(mapView.getId(), ArtMap.instance().getReflection().getMap(mapView));
+        return compress(mapView.getId(), ArtMap.instance().getReflection().getMap(mapView));
     }
 
     public static CompressedMap compress(int mapId, byte[] map) throws IOException {
@@ -26,10 +25,10 @@ public class CompressedMap extends MapId {
         return new CompressedMap(mapId, Arrays.hashCode(map), compressed);
     }
 
-	public static CompressedMap compress(int newId, MapView mapView) throws IOException {
-		byte[] compressed = new f32x32().generateBLOB(ArtMap.instance().getReflection().getMap(mapView));
-		return new CompressedMap(newId, Arrays.hashCode(ArtMap.instance().getReflection().getMap(mapView)), compressed);
-	}
+    public static CompressedMap compress(int newId, MapView mapView) throws IOException {
+        byte[] compressed = new f32x32().generateBLOB(ArtMap.instance().getReflection().getMap(mapView));
+        return new CompressedMap(newId, Arrays.hashCode(ArtMap.instance().getReflection().getMap(mapView)), compressed);
+    }
 
     public byte[] getCompressedMap() {
         return Arrays.copyOf(this.compressedMap, this.compressedMap.length);

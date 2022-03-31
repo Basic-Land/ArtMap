@@ -7,7 +7,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.IO.Protocol.In.Packet.ArtistPacket;
 import me.Fupery.ArtMap.Painting.ArtistHandler;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,7 +42,7 @@ public class ProtocolLibReceiver extends PacketReceiver {
         } else if (packet.getType() == PacketType.Play.Client.USE_ENTITY) {
             EnumWrappers.EntityUseAction action = packet.getEntityUseActions().read(0);
             return new PacketInteract(
-                action == EnumWrappers.EntityUseAction.ATTACK ? InteractType.ATTACK : InteractType.INTERACT);
+                    action == EnumWrappers.EntityUseAction.ATTACK ? InteractType.ATTACK : InteractType.INTERACT);
         }
         return null;
     }
@@ -51,6 +50,14 @@ public class ProtocolLibReceiver extends PacketReceiver {
     @Override
     public void close() {
         ProtocolLibrary.getProtocolManager().removePacketListeners(ArtMap.instance());
+    }
+
+    @Override
+    public void injectPlayer(Player player) throws ReflectiveOperationException {
+    }
+
+    @Override
+    public void uninjectPlayer(Player player) {
     }
 
     class DefaultPacketAdapter extends PacketAdapter {
@@ -74,10 +81,4 @@ public class ProtocolLibReceiver extends PacketReceiver {
             }
         }
     }
-
-    @Override
-    public void injectPlayer(Player player) throws ReflectiveOperationException {}
-
-    @Override
-    public void uninjectPlayer(Player player) {}
 }

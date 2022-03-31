@@ -1,17 +1,16 @@
 package me.Fupery.ArtMap.IO;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
-
+import me.Fupery.ArtMap.IO.Database.Map;
+import me.Fupery.ArtMap.Recipe.ArtItem;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.IO.Database.Map;
-import me.Fupery.ArtMap.Recipe.ArtItem;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 public class MapArt {
     private final int id;
@@ -61,7 +60,7 @@ public class MapArt {
 
     @Override
     public String toString() {
-        return MessageFormat.format("Artwork #{0} created by {1} named {2} on {3}", this.id,this.artist,this.title,this.date);
+        return MessageFormat.format("Artwork #{0} created by {1} named {2} on {3}", this.id, this.artist, this.title, this.date);
     }
 
     public ItemStack getMapItem() {
@@ -74,6 +73,10 @@ public class MapArt {
 
     public String getTitle() {
         return title;
+    }
+
+    public MapArt setTitle(String title) {
+        return new MapArt(this.id, title, this.artist, this.artistName, this.date);
     }
 
     public UUID getArtist() {
@@ -95,10 +98,6 @@ public class MapArt {
     public MapArt updateMapId(int newID) {
         return new MapArt(newID, title, artist, artistName, date);
     }
-
-	public MapArt setTitle(String title) {
-		return new MapArt(this.id, title, this.artist, this.artistName, this.date);
-	}
 
     public Map getMap() {
         return new Map(id);

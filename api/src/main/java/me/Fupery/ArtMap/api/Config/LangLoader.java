@@ -1,22 +1,16 @@
 package me.Fupery.ArtMap.api.Config;
 
+import me.Fupery.ArtMap.api.IArtMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.Fupery.ArtMap.api.IArtMap;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+import javax.annotation.Nonnull;
+import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
-
-import javax.annotation.Nonnull;
 
 class LangLoader {
     private IArtMap plugin;
@@ -63,13 +57,13 @@ class LangLoader {
         File langFile = getCustomLangFile();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(langFile, true));
-            for (Entry<String,String> ent : missingStrings.entrySet()) {
+            for (Entry<String, String> ent : missingStrings.entrySet()) {
                 writer.newLine();
                 writer.write(ent.getKey() + ": \"" + ent.getValue() + "\"");
             }
             writer.close();
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Cannot save default keys to lang,yml.",e);
+            plugin.getLogger().log(Level.SEVERE, "Cannot save default keys to lang,yml.", e);
         }
     }
 
@@ -90,7 +84,7 @@ class LangLoader {
         if (messages.isEmpty()) {
             //if loading as List fails try loading as String an making a list
             messages = Collections.singletonList(lang.getString(key));
-            if(messages.isEmpty()) {
+            if (messages.isEmpty()) {
                 logLangError(String.format("Error loading key from lang.yml: '%s'", key));
                 if (defaults == null || !defaults.contains(key)) return new String[]{"[" + key + "] NOT FOUND"};
                 messages = defaults.getStringList(key);

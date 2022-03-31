@@ -1,13 +1,12 @@
 package me.Fupery.ArtMap.IO.Legacy;
 
-import me.Fupery.ArtMap.IO.ColourMap.f32x32;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
+import me.Fupery.ArtMap.IO.ColourMap.f32x32;
 import me.Fupery.ArtMap.IO.CompressedMap;
 import me.Fupery.ArtMap.IO.Database.SQLiteDatabase;
 import me.Fupery.ArtMap.IO.Database.SQLiteTable;
 import me.Fupery.ArtMap.IO.MapArt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -136,7 +135,7 @@ public class V2DatabaseConverter extends DatabaseConverter {
                         try {
                             artList.add(readArtwork(set));
                         } catch (Exception e) {
-                            ArtMap.instance().getLogger().log(Level.SEVERE, "Exception reading artwork!",e);
+                            ArtMap.instance().getLogger().log(Level.SEVERE, "Exception reading artwork!", e);
                         }
                     }
                     return artList;

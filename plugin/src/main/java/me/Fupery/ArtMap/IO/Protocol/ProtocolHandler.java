@@ -1,13 +1,12 @@
 package me.Fupery.ArtMap.IO.Protocol;
 
 import com.comphenix.protocol.ProtocolLibrary;
-
-import org.bukkit.Bukkit;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.IO.Protocol.In.GenericPacketReceiver;
 import me.Fupery.ArtMap.IO.Protocol.In.PacketReceiver;
 import me.Fupery.ArtMap.IO.Protocol.In.ProtocolLibReceiver;
+import org.bukkit.Bukkit;
+
 ;
 
 public class ProtocolHandler {

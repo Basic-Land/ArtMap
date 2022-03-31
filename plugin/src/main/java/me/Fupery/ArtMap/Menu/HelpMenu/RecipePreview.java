@@ -1,18 +1,17 @@
 package me.Fupery.ArtMap.Menu.HelpMenu;
 
-import me.Fupery.ArtMap.api.Config.Lang;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Menu.API.BasicMenu;
 import me.Fupery.ArtMap.Menu.Button.Button;
 import me.Fupery.ArtMap.Menu.Button.StaticButton;
 import me.Fupery.ArtMap.Recipe.ArtMaterial;
-
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 public class RecipePreview extends BasicMenu {
 
@@ -31,7 +30,7 @@ public class RecipePreview extends BasicMenu {
 
     @Override
     public Future<Button[]> getButtons() {
-        FutureTask<Button[]> task = new FutureTask<> (()->{
+        FutureTask<Button[]> task = new FutureTask<>(() -> {
             ItemStack[] preview = recipe.getPreview();
             Button[] buttons = new Button[preview.length];
 

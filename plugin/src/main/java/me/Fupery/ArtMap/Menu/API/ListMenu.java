@@ -1,16 +1,5 @@
 package me.Fupery.ArtMap.Menu.API;
 
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryType;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Menu.Button.Button;
 import me.Fupery.ArtMap.Menu.Button.CloseButton;
@@ -18,6 +7,16 @@ import me.Fupery.ArtMap.Menu.Button.LinkedButton;
 import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
 import me.Fupery.ArtMap.Menu.Event.MenuFactory;
 import me.Fupery.ArtMap.Menu.Handler.CacheableMenu;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryType;
+
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public abstract class ListMenu extends CacheableMenu {
 
@@ -67,7 +66,7 @@ public abstract class ListMenu extends CacheableMenu {
 
         if (page < 1) {
             if (this.parent.isPresent()) {
-                String[] back = { ChatColor.RED.toString() + ChatColor.BOLD + LEFT_ARROW };
+                String[] back = {ChatColor.RED.toString() + ChatColor.BOLD + LEFT_ARROW};
                 buttons[0] = new LinkedButton(this.parent.get(), Material.MAGENTA_GLAZED_TERRACOTTA, back);
             } else {
                 buttons[0] = new CloseButton();
@@ -79,8 +78,8 @@ public abstract class ListMenu extends CacheableMenu {
                 buttons[0].setAmount(page);
             }
         }
-        
-        if(cachedButtons == null) {
+
+        if (cachedButtons == null) {
             try {
                 cachedButtons = getListItems().get();
             } catch (InterruptedException | ExecutionException e) {
@@ -89,7 +88,7 @@ public abstract class ListMenu extends CacheableMenu {
         }
 
         Button[] listItems = cachedButtons;
-        
+
         int start = page * maxButtons;
         int pageLength = listItems.length - start;
 
@@ -125,7 +124,7 @@ public abstract class ListMenu extends CacheableMenu {
         boolean forward;
 
         private PageButton(boolean forward) {
-			super(forward ? Material.MAGENTA_GLAZED_TERRACOTTA : Material.BARRIER, forward ? ChatColor.GREEN.toString() + ChatColor.BOLD + RIGHT_ARROW : ChatColor.GREEN.toString() + ChatColor.BOLD + LEFT_ARROW);
+            super(forward ? Material.MAGENTA_GLAZED_TERRACOTTA : Material.BARRIER, forward ? ChatColor.GREEN.toString() + ChatColor.BOLD + RIGHT_ARROW : ChatColor.GREEN.toString() + ChatColor.BOLD + LEFT_ARROW);
             this.forward = forward;
         }
 

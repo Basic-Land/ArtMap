@@ -1,5 +1,8 @@
 package me.Fupery.ArtMap.IO.Database;
 
+import me.Fupery.ArtMap.ArtMap;
+import org.bukkit.Bukkit;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -7,10 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-
-import me.Fupery.ArtMap.ArtMap;
 
 public class SQLiteDatabase {
     protected final File dbFile;
@@ -29,7 +28,7 @@ public class SQLiteDatabase {
                     return null;
                 }
             } catch (IOException e) {
-                ArtMap.instance().getLogger().log(Level.SEVERE, String.format("File write error: '%s'!", dbFile.getAbsolutePath()),e);
+                ArtMap.instance().getLogger().log(Level.SEVERE, String.format("File write error: '%s'!", dbFile.getAbsolutePath()), e);
                 return null;
             }
         }
@@ -41,7 +40,7 @@ public class SQLiteDatabase {
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile);
         } catch (SQLException | ClassNotFoundException e) {
             connection = null;
-			ArtMap.instance().getLogger().log(Level.SEVERE, String.format("File write error: '%s'!", dbFile.getAbsolutePath()),e);
+            ArtMap.instance().getLogger().log(Level.SEVERE, String.format("File write error: '%s'!", dbFile.getAbsolutePath()), e);
         }
         return connection;
     }

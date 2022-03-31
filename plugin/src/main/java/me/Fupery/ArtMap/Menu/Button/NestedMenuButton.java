@@ -1,12 +1,11 @@
 package me.Fupery.ArtMap.Menu.Button;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Menu.API.SoundCompat;
 import me.Fupery.ArtMap.Menu.Handler.CacheableMenu;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 
 public class NestedMenuButton extends Button {
 

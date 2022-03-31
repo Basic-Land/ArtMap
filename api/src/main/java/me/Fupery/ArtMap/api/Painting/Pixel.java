@@ -36,8 +36,8 @@ public class Pixel {
         return pixel.x == x && pixel.y == y && pixel.colour == colour;
     }
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

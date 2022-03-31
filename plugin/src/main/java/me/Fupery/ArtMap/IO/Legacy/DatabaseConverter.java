@@ -1,19 +1,17 @@
 package me.Fupery.ArtMap.IO.Legacy;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
+import org.bukkit.command.CommandSender;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Level;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.bukkit.command.CommandSender;
-
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
 
 public abstract class DatabaseConverter {
 
@@ -31,13 +29,13 @@ public abstract class DatabaseConverter {
             return this.createExport(force);
         } catch (Exception e) {
             this.sender.sendMessage("Failure creating export check logs for more info.");
-            ArtMap.instance().getLogger().log(Level.SEVERE, "Failure creating export!",e);
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Failure creating export!", e);
             return false;
         }
     }
 
     protected String export(List<ArtworkExport> export) throws Exception {
-        if(export.isEmpty()) {
+        if (export.isEmpty()) {
             return "No artwork to export.";
         }
 

@@ -4,7 +4,6 @@ import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
 import me.Fupery.ArtMap.IO.Database.Map;
 import me.Fupery.ArtMap.IO.MapArt;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -102,7 +101,7 @@ public class FlatDatabaseConverter extends DatabaseConverter {
                     }
                 } catch (SQLException e) {
                     sendMessage("Error accessing DB!");
-                    ArtMap.instance().getLogger().log(Level.SEVERE,"Error accessing DB!",e);
+                    ArtMap.instance().getLogger().log(Level.SEVERE, "Error accessing DB!", e);
                 }
             }
         }

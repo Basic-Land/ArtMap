@@ -1,11 +1,10 @@
 package me.Fupery.ArtMap.api.Colour;
 
+import me.Fupery.ArtMap.api.Painting.Pixel;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import me.Fupery.ArtMap.api.Painting.Pixel;
 
 
 public abstract class ArtDye {
@@ -17,7 +16,7 @@ public abstract class ArtDye {
     /**
      * Durability value of -1 indicates that items of any durability will be accepted
      */
-	protected ArtDye(String localizedName, String englishName, ChatColor chatColor, Material material) {
+    protected ArtDye(String localizedName, String englishName, ChatColor chatColor, Material material) {
         this.localizedName = localizedName;
         this.englishName = englishName;
         this.chatColour = chatColor;
@@ -50,7 +49,7 @@ public abstract class ArtDye {
     }
 
     public ItemStack toItem() {
-		ItemStack item = new ItemStack(material);
+        ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(chatColour + localizedName);
         item.setItemMeta(meta);

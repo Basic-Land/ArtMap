@@ -1,12 +1,10 @@
 package me.Fupery.ArtMap.Easel;
 
-import java.lang.ref.WeakReference;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Exception.ArtMapException;
+import me.Fupery.ArtMap.Recipe.ArtMaterial;
+import me.Fupery.ArtMap.Utils.ChunkLocation;
+import me.Fupery.ArtMap.Utils.LocationHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -18,11 +16,12 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Exception.ArtMapException;
-import me.Fupery.ArtMap.Recipe.ArtMaterial;
-import me.Fupery.ArtMap.Utils.ChunkLocation;
-import me.Fupery.ArtMap.Utils.LocationHelper;
+import java.lang.ref.WeakReference;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 
 public class Easel {
 
@@ -50,7 +49,7 @@ public class Easel {
      * @param facing   The direction the easel will face. Valid directions are
      *                 NORTH, SOUTH, EAST and WEST.
      * @return A reference to the spawned easel if it was spawned successfully, or
-     *         null if the area is obstructed.
+     * null if the area is obstructed.
      */
     public static Easel spawnEasel(Location location, BlockFace facing) {
         Easel easel = new Easel(location, false);
@@ -149,7 +148,7 @@ public class Easel {
      * Removes the current item mounted on the easel. If the item is an unsaved
      * canvas, a canvas will be dropped at the easel. If the item is an edited
      * artwork, a copy of the original artwork wil be dropped.
-     * 
+     *
      * @throws SQLException
      * @throws ArtMapException
      */
@@ -159,7 +158,7 @@ public class Easel {
 
         setItem(new ItemStack(Material.AIR));
         if (canvas != null) {
-			location.getWorld().dropItem(location, canvas.getEaselItem());
+            location.getWorld().dropItem(location, canvas.getEaselItem());
         } else {
             if (item.getType() != Material.AIR) {
                 location.getWorld().dropItemNaturally(location, item);
@@ -182,10 +181,11 @@ public class Easel {
                 }
                 location.getBlock().setType(Material.AIR);
                 EaselEffect.BREAK.playEffect(getCentreLocation());
-                if (stand.remove(entities)) location.getWorld().dropItemNaturally(location, ArtMaterial.EASEL.getItem());
+                if (stand.remove(entities))
+                    location.getWorld().dropItemNaturally(location, ArtMaterial.EASEL.getItem());
                 ArtMap.instance().getEasels().remove(location);
             } catch (Exception e) {
-                ArtMap.instance().getLogger().log(Level.SEVERE,"Error removing easel!",e);
+                ArtMap.instance().getLogger().log(Level.SEVERE, "Error removing easel!", e);
             }
         });
     }
@@ -224,10 +224,10 @@ public class Easel {
         if (seat == null || marker == null) return false;
         Location location = user.getEyeLocation();
         EaselEffect.START_RIDING.playEffect(location);
-		seat.addPassenger(user);
-		if (!seat.getPassengers().contains(user)) {
-			return false;
-		}
+        seat.addPassenger(user);
+        if (!seat.getPassengers().contains(user)) {
+            return false;
+        }
 
         this.user = user.getUniqueId();
         return true;

@@ -2,11 +2,10 @@ package me.Fupery.ArtMap.Menu.API;
 
 import me.Fupery.ArtMap.Menu.Button.Button;
 import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
-
-import java.util.concurrent.Future;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+
+import java.util.concurrent.Future;
 
 public interface MenuTemplate {
 
@@ -28,8 +27,8 @@ public interface MenuTemplate {
      * Called when the player clicks the menu
      *
      * @param viewer The player viewing the menu
-     * @param slot The clicked slot
-     * @param click The type of click performed
+     * @param slot   The clicked slot
+     * @param click  The type of click performed
      */
     void onMenuClickEvent(Player viewer, int slot, ClickType click);
 

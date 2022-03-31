@@ -1,7 +1,11 @@
 package me.Fupery.ArtMap.Menu.Handler;
 
-import java.util.concurrent.ExecutionException;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Menu.API.MenuTemplate;
+import me.Fupery.ArtMap.Menu.API.MenuType;
+import me.Fupery.ArtMap.Menu.Button.Button;
+import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -9,12 +13,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Menu.API.MenuTemplate;
-import me.Fupery.ArtMap.Menu.API.MenuType;
-import me.Fupery.ArtMap.Menu.Button.Button;
-import me.Fupery.ArtMap.Menu.Event.MenuCloseReason;
-import me.Fupery.ArtMap.api.Config.Lang;
+import java.util.concurrent.ExecutionException;
 
 public abstract class CacheableMenu implements MenuTemplate {
 
@@ -50,13 +49,13 @@ public abstract class CacheableMenu implements MenuTemplate {
     Inventory open(Player player) {
         ArtMap.instance();
         Inventory inventory = this.type.createInventory(player, heading);
-		ArtMap.instance().getScheduler().ASYNC.run(() -> {
-			loadButtons(inventory);
-			ArtMap.instance().getScheduler().SYNC.run(() -> {
-				player.openInventory(inventory);
-				onMenuOpenEvent(player);
-				this.open = true;
-			});
+        ArtMap.instance().getScheduler().ASYNC.run(() -> {
+            loadButtons(inventory);
+            ArtMap.instance().getScheduler().SYNC.run(() -> {
+                player.openInventory(inventory);
+                onMenuOpenEvent(player);
+                this.open = true;
+            });
         });
         return inventory;
     }
@@ -64,8 +63,8 @@ public abstract class CacheableMenu implements MenuTemplate {
     protected void refresh(Player player) {
         Inventory inventory = player.getOpenInventory().getTopInventory();
         ArtMap.instance().getScheduler().ASYNC.run(() -> {
-			loadButtons(inventory);
-			ArtMap.instance().getScheduler().SYNC.run(() -> {
+            loadButtons(inventory);
+            ArtMap.instance().getScheduler().SYNC.run(() -> {
                 player.updateInventory();
                 onMenuRefreshEvent(player);
             });
