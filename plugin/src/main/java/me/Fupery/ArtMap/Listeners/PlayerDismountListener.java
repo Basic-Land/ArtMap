@@ -1,15 +1,14 @@
 package me.Fupery.ArtMap.Listeners;
 
 import me.Fupery.ArtMap.ArtMap;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.spigotmc.event.entity.EntityDismountEvent;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class PlayerDismountListener implements RegisteredListener {
 
@@ -26,7 +25,7 @@ public class PlayerDismountListener implements RegisteredListener {
             } catch (SQLException | IOException e) {
                 ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e);
                 player.sendMessage("Error Saving Artwork check logs.");
-                return; 
+                return;
             }
         }
     }

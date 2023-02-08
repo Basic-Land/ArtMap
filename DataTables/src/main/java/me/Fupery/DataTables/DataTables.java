@@ -1,12 +1,14 @@
 package me.Fupery.DataTables;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.zip.GZIPInputStream;
 
 public class DataTables {
 
     public static PixelTable loadTable(int resolutionFactor)
-            throws InvalidResolutionFactorException{
+            throws InvalidResolutionFactorException {
 
         PixelTable pixelTable;
 
@@ -48,5 +50,6 @@ public class DataTables {
         return null;
     }
 
-    public static class InvalidResolutionFactorException extends Throwable { }
+    public static class InvalidResolutionFactorException extends Throwable {
+    }
 }

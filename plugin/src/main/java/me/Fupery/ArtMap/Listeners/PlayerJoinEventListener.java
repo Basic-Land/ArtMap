@@ -3,7 +3,6 @@ package me.Fupery.ArtMap.Listeners;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Exception.HeadFetchException;
 import net.md_5.bungee.api.ChatColor;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -15,12 +14,12 @@ class PlayerJoinEventListener implements RegisteredListener {
             try {
                 ArtMap.instance().getHeadsCache().updateCache(event.getPlayer().getUniqueId());
             } catch (HeadFetchException e) {
-               //Too noisy going to drop the skin texture errors hear as any major issues should be caught and logged at startup.
+                //Too noisy going to drop the skin texture errors hear as any major issues should be caught and logged at startup.
             }
         });
-        if(ArtMap.instance().isDBUpgradeNeeded() && event.getPlayer().hasPermission("artmap.admin")) {
+        if (ArtMap.instance().isDBUpgradeNeeded() && event.getPlayer().hasPermission("artmap.admin")) {
             event.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + "Artmap: Old Artmap database needs coverted.  Please use /artmap covert");
-        }   
+        }
     }
 
     @Override

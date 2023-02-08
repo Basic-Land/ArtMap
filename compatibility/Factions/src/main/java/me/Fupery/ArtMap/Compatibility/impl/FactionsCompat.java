@@ -6,13 +6,11 @@ import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.ps.PS;
-
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
 
 public class FactionsCompat implements RegionHandler {
     private boolean loaded = false;

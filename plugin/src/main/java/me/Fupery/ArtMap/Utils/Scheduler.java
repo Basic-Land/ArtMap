@@ -1,7 +1,6 @@
 package me.Fupery.ArtMap.Utils;
 
 import me.Fupery.ArtMap.ArtMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -14,7 +13,7 @@ import java.util.logging.Level;
 public class Scheduler {
     //todo add checks that ArtMap isn't disabled
     private final ArtMap plugin;
-    public final TaskScheduler SYNC = new TaskScheduler() {
+    public TaskScheduler SYNC = new TaskScheduler() {
         @Override
         public BukkitTask run(Runnable runnable) {
             return Bukkit.getScheduler().runTask(plugin, runnable);
@@ -30,7 +29,7 @@ public class Scheduler {
             return Bukkit.getScheduler().runTaskTimer(plugin, runnable, startDelay, period);
         }
     };
-    public final TaskScheduler ASYNC = new TaskScheduler() {
+    public TaskScheduler ASYNC = new TaskScheduler() {
         @Override
         public BukkitTask run(Runnable runnable) {
             return Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
@@ -78,11 +77,11 @@ public class Scheduler {
 
             return future.get();
         }
-        
+
         try {
             return callable.call();
         } catch (Exception e) {
-            ArtMap.instance().getLogger().log(Level.SEVERE,"Error in sync call!",e);
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Error in sync call!", e);
             return null;
         }
     }
@@ -93,6 +92,45 @@ public class Scheduler {
         BukkitTask runLater(Runnable runnable, int delay);
 
         BukkitTask runTimer(Runnable runnable, int startDelay, int period);
+    }
+
+    public static class BukkitFuture<t> {
+        private final AtomicBoolean isReady;
+        private final AtomicReference<t> reference;
+        private final Object lock;
+        private final Callable<t> callable;
+
+        BukkitFuture(Callable<t> callable) {
+            this.isReady = new AtomicBoolean(false);
+            this.reference = new AtomicReference<>(null);
+            this.lock = new Object();
+            this.callable = callable;
+        }
+
+        void run() {
+            ArtMap.instance().getScheduler().SYNC.run(() -> {
+                synchronized (lock) {
+                    try {
+                        reference.set(callable.call());
+                    } catch (Exception e) {
+                        ArtMap.instance().getLogger().log(Level.SEVERE, "Error in sync call!", e);
+                    }
+                    lock.notifyAll();
+                }
+            });
+        }
+
+        t get() {
+            return reference.get();
+        }
+
+        Object getLock() {
+            return lock;
+        }
+
+        boolean isReady() {
+            return isReady.get();
+        }
     }
 
     public class TaskHandler {
@@ -115,45 +153,6 @@ public class Scheduler {
         public void runTimer(boolean async, int startDelay, int period) {
             if (async) runnable.runTaskTimerAsynchronously(plugin, startDelay, period);
             else runnable.runTaskTimer(plugin, startDelay, period);
-        }
-    }
-
-    public static class BukkitFuture<t> {
-        private final AtomicBoolean isReady;
-        private final AtomicReference<t> reference;
-        private final Object lock;
-        private final Callable<t> callable;
-
-        BukkitFuture(Callable<t> callable) {
-            this.isReady = new AtomicBoolean(false);
-            this.reference = new AtomicReference<>(null);
-            this.lock = new Object();
-            this.callable = callable;
-        }
-
-        void run() {
-            ArtMap.instance().getScheduler().SYNC.run(() -> {
-                synchronized (lock) {
-                    try {
-                        reference.set(callable.call());
-                    } catch (Exception e) {
-                        ArtMap.instance().getLogger().log(Level.SEVERE,"Error in sync call!",e);
-                    }
-                    lock.notifyAll();
-                }
-            });
-        }
-
-        t get() {
-            return reference.get();
-        }
-
-        Object getLock() {
-            return lock;
-        }
-
-        boolean isReady() {
-            return isReady.get();
         }
     }
 }

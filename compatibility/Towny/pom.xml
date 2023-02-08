@@ -9,16 +9,22 @@
 
     <parent>
         <groupId>com.gitlab.blockstack</groupId>
-        <artifactId>bArtMap-parent</artifactId>
-        <version>3.8.1-SNAPSHOT</version>
+        <artifactId>ArtMap-parent</artifactId>
+        <version>3.9.8</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
+
+    <repositories>
+        <repository>
+            <id>glaremasters repo</id>
+            <url>https://repo.glaremasters.me/repository/towny/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.gitlab.blockstack</groupId>
-            <artifactId>bArtMap-api</artifactId>
-            <version>3.8.1-SNAPSHOT</version>
+            <artifactId>ArtMap-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -27,9 +33,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.TownyAdvanced</groupId>
-            <artifactId>Towny</artifactId>
-            <version>0.96.2.0</version>
+            <groupId>com.palmergames.bukkit.towny</groupId>
+            <artifactId>towny</artifactId>
+            <version>0.97.5.20</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

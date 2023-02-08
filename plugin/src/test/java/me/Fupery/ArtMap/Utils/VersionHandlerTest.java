@@ -1,7 +1,8 @@
 package me.Fupery.ArtMap.Utils;
 
-import java.io.File;
-
+import me.Fupery.ArtMap.api.Utils.VersionHandler;
+import me.Fupery.ArtMap.api.Utils.VersionHandler.BukkitVersion;
+import me.Fupery.ArtMap.mocks.MockUtil;
 import org.bukkit.plugin.Plugin;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -9,12 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import me.Fupery.ArtMap.api.Utils.VersionHandler;
-import me.Fupery.ArtMap.api.Utils.VersionHandler.BukkitVersion;
-import me.Fupery.ArtMap.mocks.MockUtil;
+import java.io.File;
 
 public class VersionHandlerTest {
-    
+
     private static MockUtil mocks;
     private static Plugin mockPlugin;
 
@@ -24,14 +23,14 @@ public class VersionHandlerTest {
     @BeforeClass
     public static void setup() throws Exception {
         mocks = new MockUtil();
-        mocks.mockServer("1.13.2-R0.1-MOCK").mockArtMap();
+        mocks.mockServer("1.14.4-R0.1-MOCK").mockArtMap();
         mockPlugin = mocks.mockDataFolder(new File("target/plugins/Artmap/")).mockLogger()
-        .getPluginMock();
+                .getPluginMock();
     }
 
     @Test
     public void test_v1_13() {
-        BukkitVersion version = new VersionHandler(BukkitVersion.v1_13).getVersion();
+        BukkitVersion version = new VersionHandler(BukkitVersion.v1_13, mocks.getPluginMock()).getVersion();
         Assert.assertTrue("Should equal to 1.13 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_13));
         Assert.assertTrue("Should less than or equal to 1.13", version.isLessOrEqualTo(BukkitVersion.v1_13));
         Assert.assertTrue("Should be less than to 1.14", version.isLessThan(BukkitVersion.v1_14));
@@ -43,7 +42,7 @@ public class VersionHandlerTest {
 
     @Test
     public void test_v1_14() {
-        BukkitVersion version = new VersionHandler(BukkitVersion.v1_14).getVersion();
+        BukkitVersion version = new VersionHandler(BukkitVersion.v1_14, mocks.getPluginMock()).getVersion();
         Assert.assertTrue("Should be greater than 1.13 :: " + version.toString(), version.isGreaterThan(BukkitVersion.v1_13));
         Assert.assertTrue("Should be greater than or equal to to 1.14 :: " + version.toString(), version.isGreaterOrEqualTo(BukkitVersion.v1_14));
         Assert.assertTrue("Should equal to 1.14 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_14));
@@ -56,7 +55,7 @@ public class VersionHandlerTest {
 
     @Test
     public void test_v1_15() {
-        BukkitVersion version = new VersionHandler(BukkitVersion.v1_15).getVersion();
+        BukkitVersion version = new VersionHandler(BukkitVersion.v1_15, mocks.getPluginMock()).getVersion();
         Assert.assertTrue("Should be greater than 1.14 :: " + version.toString(), version.isGreaterThan(BukkitVersion.v1_14));
         Assert.assertTrue("Should be greater than or equal to to 1.15 :: " + version.toString(), version.isGreaterOrEqualTo(BukkitVersion.v1_15));
         Assert.assertTrue("Should equal to 1.15 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_15));
@@ -66,7 +65,7 @@ public class VersionHandlerTest {
 
     @Test
     public void test_v1_16() {
-        BukkitVersion version = new VersionHandler(BukkitVersion.v1_16).getVersion();
+        BukkitVersion version = new VersionHandler(BukkitVersion.v1_16, mocks.getPluginMock()).getVersion();
         Assert.assertTrue("Should be greater than 1.15 :: " + version.toString(), version.isGreaterThan(BukkitVersion.v1_15));
         Assert.assertTrue("Should be greater than or equal to to 1.16 :: " + version.toString(), version.isGreaterOrEqualTo(BukkitVersion.v1_16));
         Assert.assertTrue("Should equal to 1.16 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_16));
@@ -79,8 +78,8 @@ public class VersionHandlerTest {
         BukkitVersion version = VersionHandler.getLatest();
         Assert.assertTrue("Should be greater than 1.15 :: " + version.toString(), version.isGreaterThan(BukkitVersion.v1_15));
         Assert.assertTrue("Should be greater than or equal to to 1.16 :: " + version.toString(), version.isGreaterOrEqualTo(BukkitVersion.v1_16));
-        Assert.assertTrue("Should equal to 1.16 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_16));
-        Assert.assertTrue("Should less than or equal to 1.16", version.isLessOrEqualTo(BukkitVersion.v1_16));
+        Assert.assertTrue("Should equal to 1.18 :: " + version.toString(), version.isEqualTo(BukkitVersion.v1_18));
+        Assert.assertTrue("Should less than or equal to 1.18", version.isLessOrEqualTo(BukkitVersion.v1_18));
         //Assert.assertTrue("Should be less than to 1.15", version.isLessThan(BukkitVersion.v1_15));
     }
 

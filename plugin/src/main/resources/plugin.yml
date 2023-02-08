@@ -2,22 +2,22 @@ name: ${project.name}
 main: me.Fupery.ArtMap.ArtMap
 version: ${project.version}
 description: ${project.description}
-depend: [ProtocolLib]
-softdepend: [WorldGuard, Factions, Denizen, GriefPrevention, RedProtect, Landlord, iDisguise, ASkyBlock, Residence, MarriageMaster, PlotSquared, Essentials, BentoBox, CMI, GriefDefender]
-author: [Wispoffates,(Original) Fupery]
+depend: [ ProtocolLib ]
+softdepend: [ WorldGuard, Factions, Denizen, GriefPrevention, RedProtect, Landlord, iDisguise, ASkyBlock, Residence, MarriageMaster, PlotSquared, Essentials, BentoBox, CMI, GriefDefender ]
+author: [ Wispoffates,(Original) Fupery ]
 api-version: 1.13
 
 commands:
   art:
-      aliases: artmap
-      usage:  |
-        <command> save <title> : Save your artwork
-        <command> clear : Reset the artwork on an easel 
-        <command> delete <title> : Remove your artwork
-        <command> preview <title> : Preview an artwork
-        <command> help : Display help
-        <command> reload : Reloads the config
-        <command> give <player> <easel|canvas|artwork:<title>> <amount> : Give a player ArtMap item(s)
+    aliases: artmap
+    usage: |
+      <command> save <title> : Save your artwork
+      <command> clear : Reset the artwork on an easel 
+      <command> delete <title> : Remove your artwork
+      <command> preview <title> : Preview an artwork
+      <command> help : Display help
+      <command> reload : Reloads the config
+      <command> give <player> <easel|canvas|artwork:<title>> <amount> : Give a player ArtMap item(s)
 
 permissions:
   artmap.region.member:

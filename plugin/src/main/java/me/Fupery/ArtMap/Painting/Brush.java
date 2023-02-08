@@ -1,17 +1,16 @@
 package me.Fupery.ArtMap.Painting;
 
-import java.util.List;
-
+import me.Fupery.ArtMap.api.Painting.Pixel;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.api.Painting.Pixel;
+import java.util.List;
 
 public abstract class Brush {
 
     protected int cooldownMilli = 150;
-    private CanvasRenderer canvas;
     protected Player player;
+    private CanvasRenderer canvas;
 
     protected Brush(CanvasRenderer canvas, Player player) {
         this.canvas = canvas;
@@ -20,8 +19,9 @@ public abstract class Brush {
 
     /**
      * Paint with the provided brush.
-     * @param action The brush action (Left or right click)
-     * @param brush The object that is the brush.
+     *
+     * @param action     The brush action (Left or right click)
+     * @param brush      The object that is the brush.
      * @param strokeTime How long is the button held.
      * @return List of modified pixels.
      */

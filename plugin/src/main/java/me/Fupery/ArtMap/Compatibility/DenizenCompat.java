@@ -1,11 +1,5 @@
 package me.Fupery.ArtMap.Compatibility;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import io.netty.channel.Channel;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Compatibility.Dipenizen.ArtMapArt;
@@ -13,6 +7,11 @@ import me.Fupery.ArtMap.Compatibility.Dipenizen.ArtMapArtist;
 import me.Fupery.ArtMap.Compatibility.Dipenizen.ArtMapArtists;
 import me.Fupery.ArtMap.api.Compatability.ReflectionHandler;
 import net.aufdemrand.denizencore.objects.ObjectFetcher;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class DenizenCompat implements ReflectionHandler {
 
@@ -21,12 +20,12 @@ public class DenizenCompat implements ReflectionHandler {
     DenizenCompat() {
         Plugin plugin = ArtMap.instance().getServer().getPluginManager().getPlugin("Denizen");
         loaded = (plugin != null && plugin.isEnabled());
-        if(!loaded){
+        if (!loaded) {
             return;
         }
         // Add denizen objects for use in scripts
         Plugin dipenizen = ArtMap.instance().getServer().getPluginManager().getPlugin("Dipenizen");
-        if(dipenizen != null && dipenizen.isEnabled()) {
+        if (dipenizen != null && dipenizen.isEnabled()) {
             ObjectFetcher.registerWithObjectFetcher(ArtMapArt.class);
             ObjectFetcher.registerWithObjectFetcher(ArtMapArtist.class);
             ObjectFetcher.registerWithObjectFetcher(ArtMapArtists.class);
@@ -50,7 +49,7 @@ public class DenizenCompat implements ReflectionHandler {
     public Channel getPlayerChannel(Player player) throws ReflectiveOperationException {
         Object nmsPlayer, denizenPacketListener, networkManager;
         Channel channel;
-        
+
         nmsPlayer = ArtMap.instance().getReflection().invokeMethod(player, "getHandle");
         denizenPacketListener = ArtMap.instance().getReflection().getField(nmsPlayer, "playerConnection");
         networkManager = getSuperSuperField(denizenPacketListener, "networkManager");

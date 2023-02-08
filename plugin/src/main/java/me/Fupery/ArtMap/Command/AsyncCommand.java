@@ -1,10 +1,9 @@
 package me.Fupery.ArtMap.Command;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 abstract class AsyncCommand {
 

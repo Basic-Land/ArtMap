@@ -1,4 +1,5 @@
 package me.Fupery.DataTables;
+
 public class Test {
 
     public static void main(String[] args) {
@@ -10,7 +11,7 @@ public class Test {
             return;
         }
 
-        for (float f :table.getYawBounds()) {
+        for (float f : table.getYawBounds()) {
             System.out.println(f);
         }
     }

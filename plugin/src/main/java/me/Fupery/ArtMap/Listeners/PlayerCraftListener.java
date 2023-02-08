@@ -1,8 +1,11 @@
 package me.Fupery.ArtMap.Listeners;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Exception.ArtMapException;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.Utils.ItemUtils;
+import me.Fupery.ArtMap.api.Config.Lang;
+import me.Fupery.ArtMap.api.Utils.VersionHandler.BukkitVersion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,12 +16,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.CartographyInventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Exception.ArtMapException;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.Utils.ItemUtils;
-import me.Fupery.ArtMap.api.Utils.VersionHandler.BukkitVersion;
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 class PlayerCraftListener implements RegisteredListener {
 
@@ -85,7 +84,7 @@ class PlayerCraftListener implements RegisteredListener {
             } catch (SQLException | ArtMapException e) {
                 ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e);
                 event.getWhoClicked().sendMessage("Error Retrieving Artwork check logs.");
-                return; 
+                return;
             }
             if (art != null) {
                 if (event.getWhoClicked().getUniqueId().equals(art.getArtistPlayer().getUniqueId())) {
@@ -97,7 +96,7 @@ class PlayerCraftListener implements RegisteredListener {
                     event.setCancelled(true);
                 }
             }
-        } 
+        }
     }
 
 
@@ -117,7 +116,7 @@ class PlayerCraftListener implements RegisteredListener {
         ItemUtils.giveItem(player, artworkItem);
     }
 
-	@Override
+    @Override
     public void unregister() {
         CraftItemEvent.getHandlerList().unregister(this);
     }

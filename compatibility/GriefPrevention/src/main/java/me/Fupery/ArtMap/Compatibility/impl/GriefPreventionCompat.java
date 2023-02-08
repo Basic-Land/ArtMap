@@ -1,14 +1,12 @@
 package me.Fupery.ArtMap.Compatibility.impl;
 
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
 
 public class GriefPreventionCompat implements RegionHandler {
     private GriefPrevention api = null;
@@ -27,7 +25,7 @@ public class GriefPreventionCompat implements RegionHandler {
     @Override
     public boolean checkInteractAllowed(Player player, Entity entity, ClickType click) {
         Claim claim = api.dataStore.getClaimAt(entity.getLocation(), false, null);
-        if(claim == null) {
+        if (claim == null) {
             return true;
         }
         return (claim.allowAccess(player) == null);

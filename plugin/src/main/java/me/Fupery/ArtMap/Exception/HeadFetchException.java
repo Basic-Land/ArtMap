@@ -3,7 +3,7 @@ package me.Fupery.ArtMap.Exception;
 public class HeadFetchException extends ArtMapException {
 
     /**
-     *  Thrown when there is an error fetching heads.
+     * Thrown when there is an error fetching heads.
      */
     private static final long serialVersionUID = 1L;
 
@@ -12,7 +12,7 @@ public class HeadFetchException extends ArtMapException {
     }
 
     public HeadFetchException(String msg, Throwable e) {
-        super(msg,e);
+        super(msg, e);
     }
 
 }

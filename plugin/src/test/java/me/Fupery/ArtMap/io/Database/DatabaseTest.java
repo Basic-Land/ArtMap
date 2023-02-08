@@ -1,14 +1,14 @@
 package me.Fupery.ArtMap.io.Database;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
-
+import me.Fupery.ArtMap.Easel.Canvas;
+import me.Fupery.ArtMap.Easel.Canvas.CanvasCopy;
+import me.Fupery.ArtMap.Exception.DuplicateArtworkException;
+import me.Fupery.ArtMap.Exception.PermissionException;
+import me.Fupery.ArtMap.IO.CompressedMap;
+import me.Fupery.ArtMap.IO.Database.Database;
+import me.Fupery.ArtMap.IO.Database.Map;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.mocks.MockUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.junit.Assert;
@@ -17,15 +17,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import me.Fupery.ArtMap.Easel.Canvas;
-import me.Fupery.ArtMap.Easel.Canvas.CanvasCopy;
-import me.Fupery.ArtMap.Exception.DuplicateArtworkException;
-import me.Fupery.ArtMap.Exception.PermissionException;
-import me.Fupery.ArtMap.IO.CompressedMap;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.IO.Database.Database;
-import me.Fupery.ArtMap.IO.Database.Map;
-import me.Fupery.ArtMap.mocks.MockUtil;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 public class DatabaseTest {
 
@@ -38,9 +37,9 @@ public class DatabaseTest {
     @BeforeClass
     public static void setup() throws Exception {
         mocks = new MockUtil();
-        mocks.mockServer("1.15.2-R0.1-MOCK").mockArtMap();
+        mocks.mockServer("1.14.4-R0.1-MOCK").mockArtMap();
         mockPlugin = mocks.mockDataFolder(new File("target/plugins/Artmap/")).mockLogger()
-        .getPluginMock();
+                .getPluginMock();
     }
 
     @Test
@@ -258,7 +257,7 @@ public class DatabaseTest {
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player.getName(), savedArt.getArtistName());
         db.renameArtwork(savedArt, "testrename");
-        MapArt renamedArt = db.getArtwork("testrename");
+        MapArt renamedArt = db.getArtwork("testrename").orElse(null);
         Assert.assertNotNull("Database save returned null!", renamedArt);
         Assert.assertEquals("Art title does not match the rename.", "testrename", renamedArt.getTitle());
         Assert.assertEquals("Art author was changed.", player.getName(), renamedArt.getArtistName());
@@ -278,7 +277,7 @@ public class DatabaseTest {
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
         UUID[] artists = db.listArtists();
-        Assert.assertEquals("Should only return 2 artists.",2, artists.length);
+        Assert.assertEquals("Should only return 2 artists.", 2, artists.length);
         Assert.assertTrue("Player[0] missing from results.", Arrays.asList(artists).contains(player[0].getUniqueId()));
         Assert.assertTrue("Player[1] missing from results.", Arrays.asList(artists).contains(player[1].getUniqueId()));
     }
@@ -297,7 +296,7 @@ public class DatabaseTest {
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
         UUID[] artists = db.listArtists(player[0].getUniqueId());
-        Assert.assertEquals("Should only return 2 artists.",2, artists.length);
+        Assert.assertEquals("Should only return 2 artists.", 2, artists.length);
         Assert.assertTrue("Player[0] should be first in the results.", artists[0].equals(player[0].getUniqueId()));
         Assert.assertTrue("Player[1] should be second in the results.", artists[1].equals(player[1].getUniqueId()));
         artists = db.listArtists(player[1].getUniqueId());
@@ -319,7 +318,7 @@ public class DatabaseTest {
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
         MapArt[] artworks = db.listMapArt();
-        Assert.assertEquals("Should return 3 artworks.",3, artworks.length);
+        Assert.assertEquals("Should return 3 artworks.", 3, artworks.length);
         Assert.assertTrue("Expected Artwork missing!.", Arrays.asList(artworks).contains(savedArt));
     }
 
@@ -337,7 +336,7 @@ public class DatabaseTest {
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
         MapArt[] artworks = db.listMapArt(player[0].getUniqueId());
-        Assert.assertEquals("Should return 2 artworks.",2, artworks.length);
+        Assert.assertEquals("Should return 2 artworks.", 2, artworks.length);
         Assert.assertTrue("Expected Artwork missing!.", Arrays.asList(artworks).contains(savedArt));
     }
 
@@ -375,7 +374,7 @@ public class DatabaseTest {
         db.saveArtwork(mockCanvas[2], "testPlayer2_1", player[1]);
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
-        boolean found = db.containsArtwork(savedArt,false);
+        boolean found = db.containsArtwork(savedArt, false);
         Assert.assertTrue("Artwork 0 not found.", found);
     }
 
@@ -388,18 +387,18 @@ public class DatabaseTest {
         Player[] player = mocks.getRandomMockPlayers(2);
 
         MapArt savedArt = db.saveArtwork(mockCanvas[0], "test", player[0]);
-        MapArt test = new MapArt(32, savedArt.getTitle(), savedArt.getArtistPlayer().getUniqueId(), savedArt.getArtistName(),savedArt.getDate());
+        MapArt test = new MapArt(32, savedArt.getTitle(), savedArt.getArtistPlayer().getUniqueId(), savedArt.getArtistName(), savedArt.getDate());
         db.saveArtwork(mockCanvas[1], "test2", player[0]);
         db.saveArtwork(mockCanvas[2], "testPlayer2_1", player[1]);
         Assert.assertNotNull("Database save returned null!", savedArt);
         Assert.assertEquals("Artist name not saved correctly", player[0].getName(), savedArt.getArtistName());
-        boolean found = db.containsArtwork(test,true);
+        boolean found = db.containsArtwork(test, true);
         Assert.assertTrue("Artwork 0 not found.", found);
     }
 
     private void clearDatabase(Database db) throws SQLException, NoSuchFieldException, IllegalAccessException {
         MapArt[] artwork = db.listMapArt();
-        for(MapArt art : artwork) {
+        for (MapArt art : artwork) {
             db.deleteArtwork(art);
         }
     }

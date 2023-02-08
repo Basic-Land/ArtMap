@@ -2,9 +2,9 @@ package me.Fupery.ArtMap.Painting;
 
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.IO.Database.Map;
+import me.Fupery.ArtMap.IO.PixelTableManager;
 import me.Fupery.ArtMap.api.Painting.ICanvasRenderer;
 import me.Fupery.ArtMap.api.Painting.Pixel;
-import me.Fupery.ArtMap.IO.PixelTableManager;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
@@ -37,7 +37,7 @@ public class CanvasRenderer extends MapRenderer implements ICanvasRenderer {
         axisLength = 128 / resolutionFactor;
         maxUpdate = 16384;// TODO: 22/09/2016 magic value
         loadMap();
-        cursor = new Cursor(yawOffset);
+        cursor = new Cursor(yawOffset, ArtMap.instance().getPixelTable());
         active = new AtomicBoolean(true);
     }
 

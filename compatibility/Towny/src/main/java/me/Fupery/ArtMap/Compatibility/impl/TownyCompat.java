@@ -3,7 +3,9 @@ package me.Fupery.ArtMap.Compatibility.impl;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
-
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
+import me.Fupery.ArtMap.api.Utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,19 +13,15 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
-import me.Fupery.ArtMap.api.Utils.Version;
-
 public class TownyCompat implements RegionHandler {
     private boolean loaded = false;
 
     public TownyCompat() throws Exception {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("Towny");
         Version version = new Version(plugin);
-        if (version.isLessThan(0,92)) {
+        if (version.isLessThan(0, 92)) {
             loaded = false;
-           throw new Exception(String.format("Invalid Towny version: " +
+            throw new Exception(String.format("Invalid Towny version: " +
                     "'%s'. ArtMap requires version 0.92 or above.", version.toString()));
         }
         Towny.getPlugin();

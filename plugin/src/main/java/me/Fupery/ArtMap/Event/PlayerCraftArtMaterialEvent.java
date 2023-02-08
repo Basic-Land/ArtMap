@@ -1,15 +1,14 @@
 package me.Fupery.ArtMap.Event;
 
 import me.Fupery.ArtMap.Recipe.ArtMaterial;
-
-import java.util.Arrays;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 public class PlayerCraftArtMaterialEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

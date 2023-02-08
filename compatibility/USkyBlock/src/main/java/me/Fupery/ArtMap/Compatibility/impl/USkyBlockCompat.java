@@ -1,16 +1,14 @@
 package me.Fupery.ArtMap.Compatibility.impl;
 
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-
 import us.talabrek.ultimateskyblock.api.IslandInfo;
 import us.talabrek.ultimateskyblock.api.uSkyBlockAPI;
-
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
 
 public class USkyBlockCompat implements RegionHandler {
 
@@ -28,8 +26,8 @@ public class USkyBlockCompat implements RegionHandler {
     @Override
     public boolean checkBuildAllowed(Player player, Location location) {
         IslandInfo info = api.getIslandInfo(location);
-        if(info != null) {
-            if(!info.isLeader(player) && !info.getOnlineMembers().contains(player)) {
+        if (info != null) {
+            if (!info.isLeader(player) && !info.getOnlineMembers().contains(player)) {
                 return false;
             }
         }
@@ -39,8 +37,8 @@ public class USkyBlockCompat implements RegionHandler {
     @Override
     public boolean checkInteractAllowed(Player player, Entity entity, ClickType click) {
         IslandInfo info = api.getIslandInfo(entity.getLocation());
-        if(info != null) {
-            if(!info.isLeader(player) && !info.getOnlineMembers().contains(player)) {
+        if (info != null) {
+            if (!info.isLeader(player) && !info.getOnlineMembers().contains(player)) {
                 return false;
             }
         }

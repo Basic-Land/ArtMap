@@ -21,6 +21,7 @@ public class Configuration {
     public final boolean ENABLE_RECIPES;
     public final int INK_USES;
     public final boolean LIMITED_INK_USES;
+    public final String BLACKLIST;
 
     public Configuration(IArtMap plugin) {
         FileConfiguration configuration = plugin.getConfig();
@@ -42,5 +43,6 @@ public class Configuration {
         this.ENABLE_RECIPES = configuration.getBoolean("enableRecipes");
         this.INK_USES = configuration.getInt("inkUses");
         this.LIMITED_INK_USES = INK_USES > 0;
+        this.BLACKLIST = configuration.getString("blacklist");
     }
 }

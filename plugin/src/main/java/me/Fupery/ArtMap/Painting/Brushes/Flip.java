@@ -3,13 +3,12 @@ package me.Fupery.ArtMap.Painting.Brushes;
 import me.Fupery.ArtMap.Painting.Brush;
 import me.Fupery.ArtMap.Painting.CachedPixel;
 import me.Fupery.ArtMap.Painting.CanvasRenderer;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Flip extends Brush {
     public Flip(CanvasRenderer canvas, Player player) {

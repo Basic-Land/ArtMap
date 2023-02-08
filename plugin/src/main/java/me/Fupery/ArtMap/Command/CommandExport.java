@@ -1,31 +1,25 @@
 package me.Fupery.ArtMap.Command;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Exception.DuplicateArtworkException;
+import me.Fupery.ArtMap.IO.CompressedMap;
+import me.Fupery.ArtMap.IO.Database.Map;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Exception.DuplicateArtworkException;
-import me.Fupery.ArtMap.IO.CompressedMap;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.IO.Database.Map;
 
 public class CommandExport extends AsyncCommand {
 
@@ -78,8 +72,8 @@ public class CommandExport extends AsyncCommand {
                     // its a name then
                     try {
                         Player p = Bukkit.getPlayer(args[2]);
-                        if(p==null) {
-                            if(sender != null) {
+                        if (p == null) {
+                            if (sender != null) {
                                 sender.sendMessage("Player not found! :: " + args[2]);
                                 return;
                             }
@@ -105,7 +99,7 @@ public class CommandExport extends AsyncCommand {
                     msg.message = Lang.COMMAND_EXPORT.get();
                     return;
                 }
-                MapArt art;
+                Optional<MapArt> art;
                 try {
                     art = ArtMap.instance().getArtDatabase().getArtwork(args[2]);
                 } catch (SQLException e1) {
@@ -113,8 +107,8 @@ public class CommandExport extends AsyncCommand {
                     ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e1);
                     return;
                 }
-                if (art != null) {
-                    artToExport.add(art);
+                if (art.isPresent()) {
+                    artToExport.add(art.get());
                     exportFilename = args[3];
                 } else {
                     msg.message = String.format(Lang.MAP_NOT_FOUND.get(), args[2]);
@@ -146,7 +140,7 @@ public class CommandExport extends AsyncCommand {
                 sender.sendMessage(artwork + " no matching map in Map table! Error! Skipping...");
             }
         }
-        if(!exportFilename.endsWith(".json")) {
+        if (!exportFilename.endsWith(".json")) {
             exportFilename = exportFilename + ".json";
         }
         File exportFile = new File(ArtMap.instance().getDataFolder(), exportFilename);
@@ -160,7 +154,6 @@ public class CommandExport extends AsyncCommand {
             }.getType();
             gson.toJson(exports, collectionType, writer);
             writer.flush();
-            writer.close();
             sender.sendMessage(MessageFormat.format("Completed export of {0} artworks.", exports.size()));
         } catch (IOException e) {
             ArtMap.instance().getLogger().log(Level.SEVERE, "Failure writing export!", e);
@@ -185,7 +178,7 @@ public class CommandExport extends AsyncCommand {
 
         /**
          * Constructor
-         * 
+         *
          * @param artwork The artwork to export.
          * @param map     The compressedMap to export.
          */
@@ -200,7 +193,6 @@ public class CommandExport extends AsyncCommand {
 
         /**
          * Import this artwork in the database.
-         * 
          */
         public void importArtwork(CommandSender sender) {
             // 1.14 requires create map to be run on the main thread!
@@ -210,12 +202,12 @@ public class CommandExport extends AsyncCommand {
                     CompressedMap cMap = new CompressedMap(map.getMapId(), this.hash,
                             Base64.getDecoder().decode(this.mapData));
                     map.setMap(cMap.decompressMap(), true);
-                    MapArt check = ArtMap.instance().getArtDatabase().getArtwork(this.title);
-                    if (check != null) {
+                    Optional<MapArt> check = ArtMap.instance().getArtDatabase().getArtwork(this.title);
+                    if (check.isPresent()) {
                         // art with this title all ready exists see if its the same artwork (artist,and
                         // hash) otherwise increment name by 1
-                        if (check.getArtist().equals(this.artist)
-                                && check.getMap().compress().getHash().equals(this.hash)) {
+                        if (check.get().getArtist().equals(this.artist)
+                                && check.get().getMap().compress().getHash().equals(this.hash)) {
                             throw new DuplicateArtworkException("Artwok all ready in database");
                         }
                         this.title = this.title + "_1";
@@ -223,14 +215,14 @@ public class CommandExport extends AsyncCommand {
                     // null artistname since its dropped when importing into the database.
                     MapArt mapArt = new MapArt(map.getMapId(), this.title, this.artist, null, this.date);
                     ArtMap.instance().getArtDatabase().saveArtwork(mapArt, cMap);
-                    sender.sendMessage(this.title + " :: Import Successful!");
+                    ArtMap.instance().getLogger().info(this.title + " :: Import Successful!");
                 } catch (DuplicateArtworkException dae) {
                     if (sender != null) {
-                        sender.sendMessage(this.title + " :: Import Failed! :: " + dae.getMessage());
+                        ArtMap.instance().getLogger().warning(this.title + " :: Import Failed! :: " + dae.getMessage());
                     }
                 } catch (Exception e) {
                     if (sender != null) {
-                        sender.sendMessage(this.title + " :: Import Failed! :: " + e.getMessage());
+                        ArtMap.instance().getLogger().warning(this.title + " :: Import Failed! :: " + e.getMessage());
                     }
                     ArtMap.instance().getLogger().log(Level.SEVERE,
                             this.title + " :: Import Failed! :: " + e.getMessage(), e);

@@ -1,9 +1,8 @@
 package me.Fupery.ArtMap.Listeners;
 
+import me.Fupery.ArtMap.api.Utils.VersionHandler;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import me.Fupery.ArtMap.api.Utils.VersionHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +22,7 @@ public class EventManager {
         listeners.add(new PlayerSwapHandListener());
         listeners.add(new PlayerDismountListener());
         listeners.add(new PlayerJoinEventListener());
+        listeners.add(new PlayerCommandPreListener());
         PluginManager manager = plugin.getServer().getPluginManager();
         for (RegisteredListener listener : listeners) manager.registerEvents(listener, plugin);
     }

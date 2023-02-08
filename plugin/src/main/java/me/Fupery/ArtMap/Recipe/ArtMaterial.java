@@ -1,30 +1,29 @@
 package me.Fupery.ArtMap.Recipe;
 
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
-import me.Fupery.ArtMap.api.Config.Lang;
-
 public enum ArtMaterial {
 
-	EASEL, CANVAS, MAP_ART, PAINT_BRUSH, COMPASS, COAL, FEATHER, PAINTBUCKET, SPONGE;
+    EASEL, CANVAS, MAP_ART, PAINT_BRUSH, COMPASS, COAL, FEATHER, PAINTBUCKET, SPONGE;
 
     private CustomItem artItem;
 
     public static void setupRecipes() {
         EASEL.artItem = new ArtItem.CraftableItem("EASEL", Material.ARMOR_STAND, ArtItem.EASEL_KEY)
-				.name(Lang.RECIPE_EASEL_NAME).tooltip(Lang.Array.RECIPE_EASEL);
+                .name(Lang.RECIPE_EASEL_NAME).tooltip(Lang.Array.RECIPE_EASEL);
 
         CANVAS.artItem = new ArtItem.CraftableItem("CANVAS", Material.PAPER, ArtItem.CANVAS_KEY)
-				.name(Lang.RECIPE_CANVAS_NAME)
-				.tooltip(Lang.Array.RECIPE_CANVAS);
+                .name(Lang.RECIPE_CANVAS_NAME)
+                .tooltip(Lang.Array.RECIPE_CANVAS);
 
         MAP_ART.artItem = new ArtItem.ArtworkItem(-1, "Artwork", null, null);
 
-		PAINT_BRUSH.artItem = new ArtItem.CraftableItem("PAINT_BRUSH", Material.REDSTONE_TORCH, ArtItem.PAINT_BRUSH)
+        PAINT_BRUSH.artItem = new ArtItem.CraftableItem("PAINT_BRUSH", Material.REDSTONE_TORCH, ArtItem.PAINT_BRUSH)
                 .name(Lang.RECIPE_PAINT_BRUSH_NAME).tooltip(Lang.Array.RECIPE_PAINT_BRUSH);
-                
+
         COMPASS.artItem = new ArtItem.KitItem(Material.COMPASS, "COMPASS")
                 .name(Lang.ITEM_NAME_COMPASS)
                 .tooltip(Lang.Array.TOOL_COMPASS);

@@ -15,7 +15,7 @@ public interface Ingredient {
         private final Material material;
         private final int amount;
 
-		WrappedMaterial(Material material, int amount) {
+        WrappedMaterial(Material material, int amount) {
             this.material = material;
             this.amount = amount;
         }
@@ -32,7 +32,7 @@ public interface Ingredient {
 
         @Override
         public ItemStack toItemStack() {
-			return new ItemStack(material, amount);
+            return new ItemStack(material, amount);
         }
     }
 

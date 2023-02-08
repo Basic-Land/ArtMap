@@ -1,9 +1,6 @@
 package me.Fupery.ArtMap.Recipe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
+import me.Fupery.ArtMap.ArtMap;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -11,32 +8,33 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import me.Fupery.ArtMap.ArtMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 public abstract class SimpleRecipe {
+
+    private String name;
+
+    public SimpleRecipe(String name) {
+        this.name = name;
+    }
 
     public abstract Recipe toBukkitRecipe(ItemStack result);
 
     public abstract ItemStack[] getPreview();
 
-	private String name;
-
-	public SimpleRecipe(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
     public static class Shaped extends SimpleRecipe {
 
-		public Shaped(String name) {
-			super(name);
-		}
-
-		private HashMap<Character, Ingredient> items = new HashMap<>();
+        private HashMap<Character, Ingredient> items = new HashMap<>();
         private String[] shape;
+        public Shaped(String name) {
+            super(name);
+        }
 
         public Shaped shape(String... rows) {
             if (rows.length != 3) throw new RecipeException("A recipe shape must have exactly 3 rows.");
@@ -46,7 +44,7 @@ public abstract class SimpleRecipe {
         }
 
         public Shaped set(char key, Material material, int durability) {
-			items.put(key, new Ingredient.WrappedMaterial(material, 1));
+            items.put(key, new Ingredient.WrappedMaterial(material, 1));
             return this;
         }
 
@@ -61,12 +59,12 @@ public abstract class SimpleRecipe {
 
         @Override
         public Recipe toBukkitRecipe(ItemStack result) {
-			NamespacedKey key = new NamespacedKey(ArtMap.instance(), this.getName());
-			ShapedRecipe recipe = new ShapedRecipe(key, result);
+            NamespacedKey key = new NamespacedKey(ArtMap.instance(), this.getName());
+            ShapedRecipe recipe = new ShapedRecipe(key, result);
             recipe.shape(shape);
-            for (Entry<Character,Ingredient> ent : items.entrySet()) {
+            for (Entry<Character, Ingredient> ent : items.entrySet()) {
                 Ingredient item = ent.getValue();
-				recipe.setIngredient(ent.getKey(), item.getMaterial());
+                recipe.setIngredient(ent.getKey(), item.getMaterial());
             }
             return recipe;
         }
@@ -87,14 +85,14 @@ public abstract class SimpleRecipe {
 
     public static class Shapeless extends SimpleRecipe {
 
-		public Shapeless(String name) {
-			super(name);
-		}
+        private ArrayList<Ingredient> items = new ArrayList<>();
 
-		private ArrayList<Ingredient> items = new ArrayList<>();
+        public Shapeless(String name) {
+            super(name);
+        }
 
         public Shapeless add(Material material, int durability, int amount) {
-			items.add(new Ingredient.WrappedMaterial(material, amount));
+            items.add(new Ingredient.WrappedMaterial(material, amount));
             return this;
         }
 
@@ -113,10 +111,10 @@ public abstract class SimpleRecipe {
 
         @Override
         public Recipe toBukkitRecipe(ItemStack result) {
-			NamespacedKey key = new NamespacedKey(ArtMap.instance(), this.getName());
-			ShapelessRecipe recipe = new ShapelessRecipe(key, result);
+            NamespacedKey key = new NamespacedKey(ArtMap.instance(), this.getName());
+            ShapelessRecipe recipe = new ShapelessRecipe(key, result);
             for (Ingredient item : items) {
-				recipe.addIngredient(item.getAmount(), item.getMaterial());
+                recipe.addIngredient(item.getAmount(), item.getMaterial());
             }
             return recipe;
         }
@@ -133,10 +131,12 @@ public abstract class SimpleRecipe {
     }
 
     private static class RecipeException extends RuntimeException {
-		/**  */
-		private static final long serialVersionUID = 1L;
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		private RecipeException(String message) {
+        private RecipeException(String message) {
             super(message);
         }
     }

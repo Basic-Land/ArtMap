@@ -1,14 +1,14 @@
 package me.Fupery.ArtMap.Command;
 
-import java.io.FileNotFoundException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.command.CommandSender;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.IO.MapArt;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.Optional;
+import java.util.logging.Level;
 
 public class Repair extends AsyncCommand {
 
@@ -31,10 +31,10 @@ public class Repair extends AsyncCommand {
         }
 
         boolean all = "-all".equalsIgnoreCase(args[2]);
-        
+
         switch (args[1]) {
             case "-scan":
-                if(all) {
+                if (all) {
                     msg.message = "Scan will be run asynchronously check the logs for progress.";
                     repairAll(false);
                     return;
@@ -42,10 +42,10 @@ public class Repair extends AsyncCommand {
                 msg.message = repair(args[2], false);
                 break;
             case "-repair":
-                if(all) {
+                if (all) {
                     msg.message = "Scan will be run asynchronously check the logs for progress.";
                     repairAll(true);
-                    return;  
+                    return;
                 }
                 msg.message = repair(args[2], true);
                 break;
@@ -61,35 +61,35 @@ public class Repair extends AsyncCommand {
         Integer id = null;
         try {
             id = Integer.parseInt(input);
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             //likely an artwork name
-            MapArt art;
+            Optional<MapArt> art;
             try {
                 art = ArtMap.instance().getArtDatabase().getArtwork(input);
             } catch (SQLException e) {
                 return e.getMessage();
             }
-            if(art == null) {
+            if (!art.isPresent()) {
                 return "No artwork found with this name: " + input;
             }
-            id = art.getMapId();
+            id = art.get().getMapId();
         }
         try {
             boolean repaired = this.repairArtwork(id, repair);
-            if(repair) {
+            if (repair) {
                 return repaired ? "Artwork repaired." : "Artwork repair failed check the logs.";
             } else {
                 return repaired ? "Artwork is corrupted." : "Artwork is in a good state.";
             }
-            
+
         } catch (FileNotFoundException e) {
             return e.getMessage();
         }
-        
+
     }
 
     private void repairAll(boolean repair) {
-        ArtMap.instance().getScheduler().ASYNC.run(()-> {
+        ArtMap.instance().getScheduler().ASYNC.run(() -> {
             try {
                 MapArt[] arts = ArtMap.instance().getArtDatabase().listMapArt();
                 final int total = arts.length;
@@ -100,11 +100,11 @@ public class Repair extends AsyncCommand {
                 long lastUpdate = Long.MIN_VALUE;
                 final long UPDATE_INTERVAL = 30 * 1000; //30 seconds
                 ArtMap.instance().getLogger().info("Beginning scan of " + total + " artworks");
-                for(MapArt art : arts) {
+                for (MapArt art : arts) {
                     boolean result;
                     try {
                         result = this.repairArtwork(art.getMapId(), repair);
-                        if(result) {
+                        if (result) {
                             repaired++;
                         } else {
                             good++;
@@ -114,7 +114,7 @@ public class Repair extends AsyncCommand {
                         failed++;
                     }
                     completed++;
-                    if(lastUpdate + UPDATE_INTERVAL < System.currentTimeMillis()) {
+                    if (lastUpdate + UPDATE_INTERVAL < System.currentTimeMillis()) {
                         lastUpdate = System.currentTimeMillis();
                         String output = repair ? "Repaired" : "Corrupted";
                         ArtMap.instance().getLogger().info("Scan progress: Completed: " + completed + " Good: " + good + " " + output + ":" + repaired + " Failed: " + failed);
@@ -135,7 +135,7 @@ public class Repair extends AsyncCommand {
     /**
      * Check wether the specied artwork can be loaded and if repair is true attempt
      * to fix it.
-     * 
+     *
      * @param id     The Map ID of the artwork to repair
      * @param repair True - Attempt to repair to artwork.
      * @return
@@ -148,7 +148,7 @@ public class Repair extends AsyncCommand {
         } catch (SQLException e) {
             return false;
         }
-        if(art == null) {
+        if (art == null) {
             throw new FileNotFoundException("Artwork with the provided ID does not exist. :: " + id);
         }
         return ArtMap.instance().getArtDatabase().restoreMap(art.getMap(), repair, repair);

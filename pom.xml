@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gitlab.blockstack</groupId>
-    <artifactId>bArtMap-parent</artifactId>
-    <version>3.8.1-SNAPSHOT</version>
+    <artifactId>ArtMap-parent</artifactId>
+    <version>3.9.8</version>
     <description>Make pixel art!</description>
     <packaging>pom</packaging>
 
@@ -21,6 +21,7 @@
         <module>compatibility/Spigot_1_13</module>
         <module>compatibility/Spigot_1_14</module>
         <module>compatibility/Spigot_1_16</module>
+        <module>compatibility/Spigot_1_18</module>
         <!-- plugin compatibility -->
         <module>compatibility/ASkyBlock</module>
         <module>compatibility/BentoBox</module>
@@ -51,12 +52,10 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
-        <!-- Something wrong with protocollib maven cert
         <repository>
             <id>dmulloy2-repo</id>
             <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
         </repository>
-        -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -64,7 +63,7 @@
         <!-- iDisguise -->
         <repository>
             <id>robingrether-repo</id>
-            <url>https://repo.robingrether.de/</url>
+            <url>https://www.robingrether.de/mc/repo</url>
         </repository>
         <repository>
             <id>citizen</id>
@@ -97,42 +96,11 @@
         <dependencies>
             <dependency>
                 <groupId>com.gitlab.blockstack</groupId>
-                <artifactId>bArtMap-api</artifactId>
-                <version>3.8.1-SNAPSHOT</version>
+                <artifactId>ArtMap-api</artifactId>
+                <version>3.9.8</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>3.1.12.2</version>
-                <configuration>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.mebigfatguy.fb-contrib</groupId>
-                            <artifactId>fb-contrib</artifactId>
-                            <version>7.4.7</version>
-                        </plugin>
-                    </plugins>
-                    <effort>High</effort>
-                    <threshold>Low</threshold>
-                    <timeout>1200000</timeout>
-                    <maxHeap>1024</maxHeap>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>site</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <scm>
         <url>https://gitlab.com/BlockStack/ArtMap</url>
@@ -142,11 +110,4 @@
         <system>gitlab</system>
         <url>https://gitlab.com/BlockStack/ArtMap/issues</url>
     </issueManagement>
-    <distributionManagement>
-        <repository>
-            <id>BlockStack</id>
-            <name>BlockStack</name>
-            <url>https://nexus.troytech.info/repository/BlockStack/</url>
-        </repository>
-    </distributionManagement>
 </project>

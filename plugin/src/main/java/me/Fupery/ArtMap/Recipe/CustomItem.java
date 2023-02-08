@@ -1,12 +1,6 @@
 package me.Fupery.ArtMap.Recipe;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Map.Entry;
-
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,18 +10,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.Fupery.ArtMap.api.Config.Lang;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class CustomItem {
     private final String key;
     private final Material material;
+    protected Optional<ItemStack> stack = Optional.empty();
     private String name = null;
     private String[] tooltip = new String[0];
     private ItemFlag[] itemFlags = new ItemFlag[0];
     private HashMap<Enchantment, Integer> enchants = new HashMap<>();
     private int amount = 1;
     private SimpleRecipe recipe = null;
-	protected Optional<ItemStack>			stack		= Optional.empty();
 
     public CustomItem(Material material, String uniqueKey) {
         this.material = material;
@@ -53,11 +48,11 @@ public class CustomItem {
         this.tooltip = tooltip;
     }
 
-	public CustomItem(ItemStack stack, String key) {
-		this.stack = Optional.of(stack);
-		this.material = stack.getType();
-		this.key = key;
-	}
+    public CustomItem(ItemStack stack, String key) {
+        this.stack = Optional.of(stack);
+        this.material = stack.getType();
+        this.key = key;
+    }
 
     public CustomItem name(String name) {
         this.name = name;
@@ -126,7 +121,7 @@ public class CustomItem {
     public boolean checkItem(ItemStack itemStack) {
         if (itemStack != null
                 && itemStack.getType() == material
-		        && itemStack.hasItemMeta()) {
+                && itemStack.hasItemMeta()) {
             ItemMeta itemMeta = itemStack.getItemMeta();
             if (itemMeta.hasLore() && itemMeta.getLore().get(0).contains(key)) {
                 return true;
@@ -136,10 +131,10 @@ public class CustomItem {
     }
 
     public ItemStack toItemStack() {
-		// get the stack or create a new one.
-		ItemStack item = stack.isPresent() ? stack.get() : new ItemStack(material, amount);
+        // get the stack or create a new one.
+        ItemStack item = stack.isPresent() ? stack.get() : new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
-        if(meta == null) {
+        if (meta == null) {
             return null;
         }
         if (name != null) meta.setDisplayName(name);
@@ -149,7 +144,7 @@ public class CustomItem {
         meta.setLore(lore);
         if (itemFlags.length > 0) meta.addItemFlags(itemFlags);
         if (enchants.size() > 0) {
-            for (Entry<Enchantment,Integer> e : enchants.entrySet()) {
+            for (Entry<Enchantment, Integer> e : enchants.entrySet()) {
                 meta.addEnchant(e.getKey(), e.getValue(), true);
             }
         }

@@ -6,26 +6,23 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
-
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
+import me.Fupery.ArtMap.api.Utils.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import me.Fupery.ArtMap.api.Utils.Version;
-
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
-
 public class WorldGuardCompat implements RegionHandler {
-    private WorldGuardPlugin worldGuardPlugin;
     boolean loaded = false;
+    private WorldGuardPlugin worldGuardPlugin;
 
     public WorldGuardCompat() throws Exception {
         Plugin plugin = Bukkit.getPluginManager().getPlugin("WorldGuard");
         Version version = new Version(plugin);
-        if (version.isLessThan(7,0,0)) {
+        if (version.isLessThan(7, 0, 0)) {
             loaded = false;
             throw new Exception(String.format("Invalid WorldGuard version: " +
                     "'%s'. ArtMap requires version 7.0.0 or above.", version.toString()));

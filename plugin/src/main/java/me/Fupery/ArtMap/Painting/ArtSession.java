@@ -1,34 +1,8 @@
 package me.Fupery.ArtMap.Painting;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-
 import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Colour.ArtDye;
-import me.Fupery.ArtMap.api.Colour.DyeType;
-import me.Fupery.ArtMap.api.Colour.Palette;
-import me.Fupery.ArtMap.api.Config.Lang;
 import me.Fupery.ArtMap.Easel.Easel;
 import me.Fupery.ArtMap.Event.PlayerMountEaselEvent;
 import me.Fupery.ArtMap.IO.Database.Map;
@@ -39,288 +13,286 @@ import me.Fupery.ArtMap.Painting.Brushes.Flip;
 import me.Fupery.ArtMap.Recipe.ArtItem;
 import me.Fupery.ArtMap.Recipe.ArtMaterial;
 import me.Fupery.ArtMap.Utils.ItemUtils;
+import me.Fupery.ArtMap.api.Colour.ArtDye;
+import me.Fupery.ArtMap.api.Colour.DyeType;
+import me.Fupery.ArtMap.api.Colour.Palette;
+import me.Fupery.ArtMap.api.Config.Lang;
 import me.Fupery.ArtMap.api.Painting.IArtSession;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.logging.Level;
 
 public class ArtSession implements IArtSession {
-	private final CanvasRenderer canvas;
-	private final Brush DYE;
-	private final Brush FILL;
-	private final Brush FLIP;
-	private final Brush DROPPER;
-	private final Easel easel;
-	private final Map map;
-	private Brush currentBrush;
-	private long lastStroke;
-	private ItemStack[] inventory;
-	private static final HashMap<UUID, ItemStack[]> artkitHotbars = new HashMap<>();
+    private static final HashMap<UUID, ItemStack[]> artkitHotbars = new HashMap<>();
+    /* Artkit */
+    private static WeakReference<List<ItemStack[]>> kitReference = new WeakReference<>(new LinkedList<>());
+    private final CanvasRenderer canvas;
+    private final Brush DYE;
+    private final Brush FILL;
+    private final Brush FLIP;
+    private final Brush DROPPER;
+    private final Easel easel;
+    private final Map map;
+    private Brush currentBrush;
+    private long lastStroke;
+    private ItemStack[] inventory;
+    private boolean active = false;
+    private boolean dirty = true;
+    private int artkitPage = 0;
 
-	private boolean active = false;
-	private boolean dirty = true;
-	private int artkitPage = 0;
+    ArtSession(Player player, Easel easel, Map map, int yawOffset) {
+        this.easel = easel;
+        canvas = new CanvasRenderer(map, yawOffset);
+        currentBrush = null;
+        lastStroke = System.currentTimeMillis();
+        DYE = new Dye(canvas, player);
+        DROPPER = new Dropper(canvas, player);
+        FILL = new Fill(canvas, player, (Dropper) DROPPER);
+        FLIP = new Flip(canvas, player);
+        this.map = map;
+    }
 
-	ArtSession(Player player, Easel easel, Map map, int yawOffset) {
-		this.easel = easel;
-		canvas = new CanvasRenderer(map, yawOffset);
-		currentBrush = null;
-		lastStroke = System.currentTimeMillis();
-		DYE = new Dye(canvas, player);
-		DROPPER = new Dropper(canvas, player);
-		FILL = new Fill(canvas, player, (Dropper) DROPPER);
-		FLIP = new Flip(canvas, player);
-		this.map = map;
-	}
+    /**
+     * Clear a players hotbar save. For instance on logout.
+     *
+     * @param player The player to remove.
+     */
+    public static void clearHotbar(Player player) {
+        artkitHotbars.remove(player.getUniqueId());
+    }
 
-	GameMode gmstatus;
+    public boolean start(Player player) throws SQLException, IOException {
+        PlayerMountEaselEvent event = new PlayerMountEaselEvent(player, easel);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
 
-	public boolean start(Player player) throws SQLException, IOException {
-		PlayerMountEaselEvent event = new PlayerMountEaselEvent(player, easel);
-		Bukkit.getServer().getPluginManager().callEvent(event);
-		if (event.isCancelled()) {
-			return false;
-		}
+        boolean seated = easel.seatUser(player);
+        if (!seated) {
+            return false;
+        }
 
-		boolean seated = easel.seatUser(player);
-		if (player.getGameMode() == GameMode.CREATIVE) {
-			player.setGameMode(GameMode.SURVIVAL);
+        // Run tasks
+        try {
+            ArtMap.instance().getArtDatabase().restoreMap(map, true, false);
+            ArtMap.instance().getScheduler().SYNC.runLater(() -> {
+                if (player.getVehicle() != null)
+                    Lang.ActionBar.PAINTING.send(player);
+            }, 30);
+            if (ArtMap.instance().getConfiguration().FORCE_ART_KIT && player.hasPermission("artmap.artkit")) {
+                addKit(player);
+            }
+            map.setRenderer(canvas);
+            persistMap(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            player.sendMessage("Error restoring painting! Check server logs for more details!");
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Error restoring painting on easel.", e);
+            event.setCancelled(true);
+            return false;
+        }
+        return true;
+    }
 
-			// Asi by tu mohla být kontrola jestli hráč nemá už RESISTANCE a vrátit mu zpět
-			// tu správnou hodnotu když přestane malovat
-			// ale stejně je v creativu tak si může dát ten potion znovu
-			player.addPotionEffect(
-					new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 1000000, 127, false, false, false), true);
-			player.addPotionEffect(
-					new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1000000, 127, false, false, false), true);
-			gmstatus = GameMode.CREATIVE;
-		}
-		if (!seated) {
-			return false;
-		}
+    void paint(ItemStack brush, Brush.BrushAction action) {
+        if (!dirty)
+            dirty = true;
+        if (currentBrush == null || !currentBrush.checkMaterial(brush)) {
+            if (currentBrush != null)
+                currentBrush.clean();
+            currentBrush = getBrushType(brush);
+        }
+        if (currentBrush == null || canvas.isOffCanvas())
+            return;
 
-		// Run tasks
-		try {
-			ArtMap.instance().getArtDatabase().restoreMap(map, true, false);
-			ArtMap.instance().getScheduler().SYNC.runLater(() -> {
-				if (player.getVehicle() != null)
-					Lang.ActionBar.PAINTING.send(player);
-			}, 30);
-			if (ArtMap.instance().getConfiguration().FORCE_ART_KIT && player.hasPermission("artmap.artkit")) {
-				addKit(player);
-			}
-			map.setRenderer(canvas);
-			persistMap(false);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			player.sendMessage("Error restoring painting! Check server logs for more details!");
-			ArtMap.instance().getLogger().log(Level.SEVERE, "Error restoring painting on easel.", e);
-			event.setCancelled(true);
-			return false;
-		}
-		return true;
-	}
+        long currentTime = System.currentTimeMillis();
+        long strokeTime = currentTime - lastStroke;
+        if (strokeTime > currentBrush.getCooldown()) {
+            currentBrush.paint(action, brush, strokeTime);
+        }
+        lastStroke = System.currentTimeMillis();
+    }
 
-	void paint(ItemStack brush, Brush.BrushAction action) {
-		if (!dirty)
-			dirty = true;
-		if (currentBrush == null || !currentBrush.checkMaterial(brush)) {
-			if (currentBrush != null)
-				currentBrush.clean();
-			currentBrush = getBrushType(brush);
-		}
-		if (currentBrush == null || canvas.isOffCanvas())
-			return;
+    private Brush getBrushType(ItemStack item) {
+        for (Brush brush : new Brush[]{DYE, FILL, FLIP, DROPPER}) {
+            if (brush.checkMaterial(item)) {
+                return brush;
+            }
+        }
+        return null;
+    }
 
-		long currentTime = System.currentTimeMillis();
-		long strokeTime = currentTime - lastStroke;
-		if (strokeTime > currentBrush.getCooldown()) {
-			currentBrush.paint(action, brush, strokeTime);
-		}
-		lastStroke = System.currentTimeMillis();
-	}
+    public void updatePosition(float yaw, float pitch) {
+        canvas.setYaw(yaw);
+        canvas.setPitch(pitch);
+    }
 
-	private Brush getBrushType(ItemStack item) {
-		for (Brush brush : new Brush[] { DYE, FILL, FLIP, DROPPER }) {
-			if (brush.checkMaterial(item)) {
-				return brush;
-			}
-		}
-		return null;
-	}
+    private void addKit(Player player) {
+        PlayerInventory pInv = player.getInventory();
+        this.inventory = pInv.getContents();
+        pInv.setStorageContents(this.getArtKit(0));
+        // restore hotbar
+        if (artkitHotbars.containsKey(player.getUniqueId())) {
+            ItemStack[] hotbar = artkitHotbars.get(player.getUniqueId());
+            for (int i = 0; i < 9; i++) {
+                player.getInventory().setItem(i, hotbar[i]);
+            }
+            player.getInventory().setItemInOffHand(hotbar[9]);
+        } else {
+            player.getInventory().setItemInOffHand(null);
+        }
+    }
 
-	public void updatePosition(float yaw, float pitch) {
-		canvas.setYaw(yaw);
-		canvas.setPitch(pitch);
-	}
+    public void nextKitPage(Player player) {
+        if (this.artkitPage < this.numPages() - 1) {
+            this.artkitPage++;
+            this.updateKitPage(player);
+        }
+    }
 
-	private void addKit(Player player) {
-		PlayerInventory pInv = player.getInventory();
-		this.inventory = pInv.getContents();
-		pInv.setStorageContents(this.getArtKit(0));
-		// restore hotbar
-		if (artkitHotbars.containsKey(player.getUniqueId())) {
-			ItemStack[] hotbar = artkitHotbars.get(player.getUniqueId());
-			for (int i = 0; i < 9; i++) {
-				player.getInventory().setItem(i, hotbar[i]);
-			}
-			player.getInventory().setItemInOffHand(hotbar[9]);
-		}
-	}
+    public void prevKitPage(Player player) {
+        if (this.artkitPage > 0) {
+            this.artkitPage--;
+            this.updateKitPage(player);
+        }
+    }
 
-	public void nextKitPage(Player player) {
-		if (this.artkitPage < this.numPages() - 1) {
-			this.artkitPage++;
-			this.updateKitPage(player);
-		}
-	}
+    /*
+     * Set the contents of the inventory without replacing the hotkey bar.
+     */
+    private void updateKitPage(Player player) {
+        ItemStack[] kit = this.getArtKit(this.artkitPage);
+        ItemStack[] current = player.getInventory().getStorageContents();
+        System.arraycopy(current, 0, kit, 0, 9);
+        player.getInventory().setStorageContents(kit);
+    }
 
-	public void prevKitPage(Player player) {
-		if (this.artkitPage > 0) {
-			this.artkitPage--;
-			this.updateKitPage(player);
-		}
-	}
+    public boolean removeKit(Player player) {
+        if (inventory == null) {
+            return false;
+        }
+        // save hotbar + offhand
+        ItemStack[] hotbar = new ItemStack[10];
+        for (int i = 0; i < 9; i++) {
+            hotbar[i] = player.getInventory().getItem(i);
+        }
+        hotbar[9] = player.getInventory().getItemInOffHand();
+        artkitHotbars.put(player.getUniqueId(), hotbar);
+        // clear item on cursor
+        player.getOpenInventory().setCursor(null);
 
-	/*
-	 * Set the contents of the inventory without replacing the hotkey bar.
-	 */
-	private void updateKitPage(Player player) {
-		ItemStack[] kit = this.getArtKit(this.artkitPage);
-		ItemStack[] current = player.getInventory().getStorageContents();
-		System.arraycopy(current, 0, kit, 0, 9);
-		player.getInventory().setStorageContents(kit);
-	}
+        player.getInventory().setContents(inventory);
+        inventory = null;
+        return true;
+    }
 
-	public boolean removeKit(Player player) {
-		if (inventory == null) {
-			return false;
-		}
-		// save hotbar + offhand
-		ItemStack[] hotbar = new ItemStack[10];
-		for (int i = 0; i < 9; i++) {
-			hotbar[i] = player.getInventory().getItem(i);
-		}
-		hotbar[9] = player.getInventory().getItemInOffHand();
-		artkitHotbars.put(player.getUniqueId(), hotbar);
-		// clear item on cursor
-		player.getOpenInventory().setCursor(null);
+    /**
+     * @return True if the artsession has the artkit in use.
+     */
+    public boolean isInArtKit() {
+        return this.inventory != null;
+    }
 
-		player.getInventory().setContents(inventory);
-		inventory = null;
-		return true;
-	}
+    public Easel getEasel() {
+        return easel;
+    }
 
-	/**
-	 * Clear a players hotbar save. For instance on logout.
-	 * 
-	 * @param player The player to remove.
-	 */
-	public static void clearHotbar(Player player) {
-		artkitHotbars.remove(player.getUniqueId());
-	}
+    public void end(Player player) throws SQLException, IOException {
+        try {
+            //player.leaveVehicle();
+            player.teleport(player.getLocation().add(0, 0.25, 0));
+            removeKit(player);
+            easel.removeUser();
+            canvas.stop();
+            persistMap(true);
+            active = false;
+        } catch (Exception e) {
+            player.sendMessage("Error saving painting on easel. Check logs for more details.");
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Error saving painting on easel.", e);
+        }
+        // todo map renderer getting killed after save
+    }
 
-	/**
-	 * @return True if the artsession has the artkit in use.
-	 */
-	public boolean isInArtKit() {
-		return this.inventory != null;
-	}
+    public void persistMap(boolean resetRenderer) throws SQLException, IOException, NoSuchFieldException,
+            IllegalAccessException {
+        if (!dirty) return; //no caching required
+        byte[] mapData = canvas.getMap();
+        map.setMap(mapData, resetRenderer);
+        ArtMap.instance().getArtDatabase().saveInProgressArt(this.map, mapData);
+        dirty = false;
+    }
 
-	public Easel getEasel() {
-		return easel;
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	public void end(Player player) throws SQLException, IOException {
-		try {
-			player.leaveVehicle();
-			removeKit(player);
-			easel.removeUser();
-			canvas.stop();
-			persistMap(true);
-			active = false;
-			if (gmstatus == GameMode.CREATIVE) {
-				player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-				player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
-				player.setGameMode(GameMode.CREATIVE);
-			}
-		} catch (Exception e) {
-			player.sendMessage("Error saving painting on easel. Check logs for more details.");
-			ArtMap.instance().getLogger().log(Level.SEVERE, "Error saving painting on easel.", e);
-		}
-		// todo map renderer getting killed after save
-	}
+    void setActive(boolean active) {
+        this.active = active;
+    }
 
-	public void persistMap(boolean resetRenderer)
-			throws SQLException, IOException, NoSuchFieldException, IllegalAccessException {
-		if (!dirty)
-			return; // no caching required
-		byte[] mapData = canvas.getMap();
-		map.setMap(mapData, resetRenderer);
-		ArtMap.instance().getArtDatabase().saveInProgressArt(this.map, mapData);
-		dirty = false;
-	}
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    void sendMap(Player player) {
+        if (dirty) map.update(player);
+    }
 
-	void setActive(boolean active) {
-		this.active = active;
-	}
+    /**
+     * Clear the current map on the easel.
+     *
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws IOException
+     * @throws SQLException
+     */
+    public void clearMap() throws NoSuchFieldException, IllegalAccessException, SQLException, IOException {
+        canvas.clear();
+        this.persistMap(true);
+        //map.clear();
+    }
 
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
+    private int numPages() {
+        int numDyes = ArtMap.instance().getDyePalette().getDyes(DyeType.DYE).length;
+        return (int) Math.ceil(numDyes / 18d);
+    }
 
-	void sendMap(Player player) {
-		if (dirty)
-			map.update(player);
-	}
+    // 27 inv slots + 9 hotbar slots = 36 slots
+    private ItemStack[] getArtKit(int page) {
+        // check the cache
+        if (kitReference.get() != null && !kitReference.get().isEmpty()) {
+            return kitReference.get().get(page).clone();
+        }
+        synchronized (kitReference) {
+            if (kitReference.get() != null && !kitReference.get().isEmpty()) {
+                return kitReference.get().get(page).clone();
+            }
+            kitReference = new WeakReference<>(new LinkedList<>());
+            Palette palette = ArtMap.instance().getDyePalette();
+            int numDyes = palette.getDyes(DyeType.DYE).length;
+            int pages = (int) Math.ceil(numDyes / 18d);
+            for (int pg = 0; pg < pages; pg++) {
+                ItemStack[] itemStack = new ItemStack[36]; // 27 inv slots
+                Arrays.fill(itemStack, new ItemStack(Material.AIR));
 
-	/**
-	 * Clear the current map on the easel.
-	 * 
-	 * @throws NoSuchFieldException
-	 * @throws IllegalAccessException
-	 * @throws IOException
-	 * @throws SQLException
-	 */
-	public void clearMap() throws NoSuchFieldException, IllegalAccessException, SQLException, IOException {
-		canvas.clear();
-		this.persistMap(true);
-		// map.clear();
-	}
-
-	/* Artkit */
-	private static WeakReference<List<ItemStack[]>> kitReference = new WeakReference<>(new LinkedList<>());
-
-	private int numPages() {
-		int numDyes = ArtMap.instance().getDyePalette().getDyes(DyeType.DYE).length;
-		return (int) Math.ceil(numDyes / 18d);
-	}
-
-	// 27 inv slots + 9 hotbar slots = 36 slots
-	private ItemStack[] getArtKit(int page) {
-		// check the cache
-		if (kitReference.get() != null && !kitReference.get().isEmpty()) {
-			return kitReference.get().get(page).clone();
-		}
-		synchronized (kitReference) {
-			if (kitReference.get() != null && !kitReference.get().isEmpty()) {
-				return kitReference.get().get(page).clone();
-			}
-			kitReference = new WeakReference<>(new LinkedList<>());
-			Palette palette = ArtMap.instance().getDyePalette();
-			int numDyes = palette.getDyes(DyeType.DYE).length;
-			int pages = (int) Math.ceil(numDyes / 18d);
-			for (int pg = 0; pg < pages; pg++) {
-				ItemStack[] itemStack = new ItemStack[36]; // 27 inv slots
-				Arrays.fill(itemStack, new ItemStack(Material.AIR));
-
-				for (int j = 0; j < 18; j++) {
-					if (((pg * 18) + j) >= numDyes) {
-						break;
-					}
-					ArtDye dye = palette.getDyes(DyeType.DYE)[(pg * 18) + j];
-					itemStack[j + 9] = ItemUtils.addKey(dye.toItem(), ArtItem.KIT_KEY);
-				}
+                for (int j = 0; j < 18; j++) {
+                    if (((pg * 18) + j) >= numDyes) {
+                        break;
+                    }
+                    ArtDye dye = palette.getDyes(DyeType.DYE)[(pg * 18) + j];
+                    itemStack[j + 9] = ItemUtils.addKey(dye.toItem(), ArtItem.KIT_KEY);
+                }
 
 				// if not first page add back button
 				if (pg != 0) {
@@ -329,7 +301,7 @@ public class ArtSession implements IArtSession {
 					GameProfile profile = new GameProfile(UUID.randomUUID(), "");
 					profile.getProperties().put("textures", new Property("textures",
 							"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzdhZWU5YTc1YmYwZGY3ODk3MTgzMDE1Y2NhMGIyYTdkNzU1YzYzMzg4ZmYwMTc1MmQ1ZjQ0MTlmYzY0NSJ9fX0="));
-					Field profileField = null;
+					Field profileField;
 					try {
 						profileField = meta.getClass().getDeclaredField("profile");
 						profileField.setAccessible(true);
@@ -350,7 +322,7 @@ public class ArtSession implements IArtSession {
 					GameProfile profile = new GameProfile(UUID.randomUUID(), "");
 					profile.getProperties().put("textures", new Property("textures",
 							"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjgyYWQxYjljYjRkZDIxMjU5YzBkNzVhYTMxNWZmMzg5YzNjZWY3NTJiZTM5NDkzMzgxNjRiYWM4NGE5NmUifX19"));
-					Field profileField = null;
+					Field profileField;
 					try {
 						profileField = meta.getClass().getDeclaredField("profile");
 						profileField.setAccessible(true);
@@ -365,18 +337,18 @@ public class ArtSession implements IArtSession {
 					itemStack[35] = next;
 				}
 
-				itemStack[29] = ArtMaterial.FEATHER.getItem();
-				itemStack[30] = ArtMaterial.COAL.getItem();
-				itemStack[31] = ArtMaterial.COMPASS.getItem();
-				itemStack[32] = ArtMaterial.PAINTBUCKET.getItem();
-				itemStack[33] = ArtMaterial.SPONGE.getItem();
-				if (!ArtMap.instance().getConfiguration().DISABLE_PAINTBRUSH) {
-					itemStack[34] = ArtMaterial.PAINT_BRUSH.getItem();
-				}
-				kitReference.get().add(itemStack);
-			}
-		}
+                itemStack[29] = ArtMaterial.FEATHER.getItem();
+                itemStack[30] = ArtMaterial.COAL.getItem();
+                itemStack[31] = ArtMaterial.COMPASS.getItem();
+                itemStack[32] = ArtMaterial.PAINTBUCKET.getItem();
+                itemStack[33] = ArtMaterial.SPONGE.getItem();
+                if (!ArtMap.instance().getConfiguration().DISABLE_PAINTBRUSH) {
+                    itemStack[34] = ArtMaterial.PAINT_BRUSH.getItem();
+                }
+                kitReference.get().add(itemStack);
+            }
+        }
 
-		return kitReference.get().get(page).clone();
-	}
+        return kitReference.get().get(page).clone();
+    }
 }

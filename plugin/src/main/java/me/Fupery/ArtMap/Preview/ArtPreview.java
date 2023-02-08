@@ -1,16 +1,15 @@
 package me.Fupery.ArtMap.Preview;
 
-import java.util.UUID;
-
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.Menu.API.SoundCompat;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.Menu.API.SoundCompat;
+import java.util.UUID;
 
 public class ArtPreview extends TimedPreview {
 
@@ -24,7 +23,7 @@ public class ArtPreview extends TimedPreview {
     public boolean start(Player player) {
         super.start(player);
         PlayerInventory inventory = player.getInventory();
-        if (inventory.getItemInOffHand().getType() != Material.AIR){
+        if (inventory.getItemInOffHand().getType() != Material.AIR) {
             Lang.EMPTY_HAND_PREVIEW.send(player);
             return false;
         }
@@ -38,7 +37,7 @@ public class ArtPreview extends TimedPreview {
         SoundCompat.UI_BUTTON_CLICK.play(player, 1, -2);
         if (player.getItemOnCursor().equals(preview)) {
             player.setItemOnCursor(null);
-        } 
+        }
         if (player.getInventory().getItemInOffHand().equals(preview)) {
             player.getInventory().setItemInOffHand(null);
         }

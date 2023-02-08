@@ -4,8 +4,8 @@
 
 EXAMPLE_RECIPE:
   MATERIALS: #List the materials here. Their tag is used to define the recipe shape
-    a: {MATERIAL: INK_SACK, DURABILITY: 10, AMOUNT: 5} #Material key must be a single unique character
-    b: {MATERIAL: STICK, AMOUNT: 2} #The amount and durability tags are optional
+    a: { MATERIAL: INK_SACK, DURABILITY: 10, AMOUNT: 5 } #Material key must be a single unique character
+    b: { MATERIAL: STICK, AMOUNT: 2 } #The amount and durability tags are optional
     c: REDSTONE #If you don't want to set the amount or durability, you can just use the material
     d: GLOWSTONE
   SHAPE: #To create a shapeless recipe, remove this section

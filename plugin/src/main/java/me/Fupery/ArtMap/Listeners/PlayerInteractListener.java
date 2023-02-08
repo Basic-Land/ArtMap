@@ -1,8 +1,15 @@
 package me.Fupery.ArtMap.Listeners;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Compatibility.CompatibilityManager;
+import me.Fupery.ArtMap.Easel.Easel;
+import me.Fupery.ArtMap.Easel.EaselEffect;
+import me.Fupery.ArtMap.Exception.ArtMapException;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.Recipe.ArtMaterial;
+import me.Fupery.ArtMap.Utils.ItemUtils;
+import me.Fupery.ArtMap.Utils.LocationHelper;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -16,16 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Compatibility.CompatibilityManager;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Easel.Easel;
-import me.Fupery.ArtMap.Easel.EaselEffect;
-import me.Fupery.ArtMap.Exception.ArtMapException;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.Recipe.ArtMaterial;
-import me.Fupery.ArtMap.Utils.ItemUtils;
-import me.Fupery.ArtMap.Utils.LocationHelper;
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 class PlayerInteractListener implements RegisteredListener {
 
@@ -148,8 +147,8 @@ class PlayerInteractListener implements RegisteredListener {
                     art = ArtMap.instance().getArtDatabase().getArtwork(ItemUtils.getMapID(item));
                 } catch (SQLException e) {
                     ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e);
-					event.getWhoClicked().sendMessage("Error Retrieving Artwork check logs.");
-            		return; 
+                    event.getWhoClicked().sendMessage("Error Retrieving Artwork check logs.");
+                    return;
                 } catch (ArtMapException e) {
                     return; //some maps do not have mapviews and we don't want to spam about it here.
                 }
@@ -163,7 +162,7 @@ class PlayerInteractListener implements RegisteredListener {
         });
     }
 
-	@Override
+    @Override
     public void unregister() {
         PlayerInteractEvent.getHandlerList().unregister(this);
         InventoryCreativeEvent.getHandlerList().unregister(this);

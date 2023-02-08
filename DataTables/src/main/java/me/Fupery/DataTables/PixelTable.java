@@ -2,7 +2,7 @@ package me.Fupery.DataTables;
 
 import java.io.Serializable;
 
-public class PixelTable implements Serializable{
+public class PixelTable implements Serializable {
 
     private int resolutionFactor;
     private float[] yawBounds;

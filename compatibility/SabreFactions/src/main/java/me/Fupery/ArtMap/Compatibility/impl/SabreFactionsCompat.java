@@ -1,22 +1,15 @@
 package me.Fupery.ArtMap.Compatibility.impl;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
-
+import com.massivecraft.factions.*;
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
-
 /**
  * Support for Sabre Factions.
- * 
+ * <p>
  * Looks to be a fork of an old version of MassiveCraft Fractions.
  * Does not appear to have player permissions or at least the wiki is too sparse to see them.
  */

@@ -16,7 +16,7 @@ public class PermissionException extends ArtMapException {
     }
 
     public PermissionException(String msg, Throwable exception) {
-        super(msg,exception);
+        super(msg, exception);
     }
 
 }

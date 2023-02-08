@@ -1,9 +1,7 @@
 package me.Fupery.ArtMap.Listeners;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Painting.ArtSession;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -15,10 +13,37 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Painting.ArtSession;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 class PlayerQuitListener implements RegisteredListener {
+
+    /**
+     * Convience method to end a players art sessions including removing artkit and
+     * previews.
+     *
+     * @param player The player who's session is ending.
+     */
+    public static void endPlayerArtSession(Player player) {
+        if (ArtMap.instance().getArtistHandler().containsPlayer(player)) {
+            if (player.isInsideVehicle()) {
+                ArtMap.instance().getArtistHandler().getCurrentSession(player).removeKit(player);
+                try {
+                    ArtMap.instance().getArtistHandler().removePlayer(player);
+                } catch (SQLException | IOException e) {
+                    ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e);
+                    return;
+                }
+            }
+        }
+        if (ArtMap.instance().getPreviewManager().isPreviewing(player)) {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (item.getType() == Material.FILLED_MAP) {
+                ArtMap.instance().getPreviewManager().endPreview(player);
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
@@ -60,31 +85,5 @@ class PlayerQuitListener implements RegisteredListener {
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerDeathEvent.getHandlerList().unregister(this);
         PlayerTeleportEvent.getHandlerList().unregister(this);
-    }
-
-    /**
-     * Convience method to end a players art sessions including removing artkit and
-     * previews.
-     * 
-     * @param player The player who's session is ending.
-     */
-    public static void endPlayerArtSession(Player player) {
-        if (ArtMap.instance().getArtistHandler().containsPlayer(player)) {
-            if (player.isInsideVehicle()) {
-                ArtMap.instance().getArtistHandler().getCurrentSession(player).removeKit(player);
-                try {
-                    ArtMap.instance().getArtistHandler().removePlayer(player);
-                } catch (SQLException | IOException e) {
-                    ArtMap.instance().getLogger().log(Level.SEVERE, "Database error!", e);
-                    return; 
-                }
-            }
-        }
-		if (ArtMap.instance().getPreviewManager().isPreviewing(player)) {
-            ItemStack item = player.getInventory().getItemInMainHand();
-			if (item.getType() == Material.FILLED_MAP) {
-				ArtMap.instance().getPreviewManager().endPreview(player);
-			}
-		}
     }
 }

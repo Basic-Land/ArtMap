@@ -1,16 +1,16 @@
 package me.Fupery.ArtMap.Command;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.IO.MapArt;
+import me.Fupery.ArtMap.Preview.ArtPreview;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.IO.MapArt;
-import me.Fupery.ArtMap.Preview.ArtPreview;
+import java.sql.SQLException;
+import java.util.Optional;
+import java.util.logging.Level;
 
 class CommandPreview extends AsyncCommand {
 
@@ -31,7 +31,7 @@ class CommandPreview extends AsyncCommand {
         }
 
         ArtMap.instance().getPreviewManager().startPreview(player, new ArtPreview(art));
-        
+
         return true;
     }
 
@@ -40,20 +40,20 @@ class CommandPreview extends AsyncCommand {
 
         Player player = (Player) sender;
 
-        MapArt art;
+        Optional<MapArt> art;
         try {
             art = ArtMap.instance().getArtDatabase().getArtwork(args[1]);
         } catch (SQLException e) {
             sender.sendMessage("Error loading preview!");
-            ArtMap.instance().getLogger().log(Level.SEVERE,"Error loading preview!",e);
+            ArtMap.instance().getLogger().log(Level.SEVERE, "Error loading preview!", e);
             return;
         }
 
-        if (art == null) {
+        if (!art.isPresent()) {
             msg.message = String.format(Lang.MAP_NOT_FOUND.get(), args[1]);
             return;
         }
-        if (!previewArtwork(player, art)) {
+        if (!previewArtwork(player, art.get())) {
             msg.message = Lang.EMPTY_HAND_PREVIEW.get();
             return;
         }

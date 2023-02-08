@@ -1,5 +1,15 @@
 package me.Fupery.ArtMap.Listeners;
 
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Easel.Easel;
+import me.Fupery.ArtMap.Easel.EaselEffect;
+import me.Fupery.ArtMap.Easel.EaselEvent;
+import me.Fupery.ArtMap.Easel.EaselPart;
+import me.Fupery.ArtMap.Event.PlayerOpenMenuEvent;
+import me.Fupery.ArtMap.Menu.Handler.MenuHandler;
+import me.Fupery.ArtMap.Recipe.ArtMaterial;
+import me.Fupery.ArtMap.api.Config.Lang;
+import me.Fupery.ArtMap.api.Easel.ClickType;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -18,17 +28,6 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Easel.Easel;
-import me.Fupery.ArtMap.Easel.EaselEffect;
-import me.Fupery.ArtMap.Easel.EaselEvent;
-import me.Fupery.ArtMap.Easel.EaselPart;
-import me.Fupery.ArtMap.Event.PlayerOpenMenuEvent;
-import me.Fupery.ArtMap.Menu.Handler.MenuHandler;
-import me.Fupery.ArtMap.Recipe.ArtMaterial;
-import me.Fupery.ArtMap.api.Easel.ClickType;
 
 class PlayerInteractEaselListener implements RegisteredListener {
 
@@ -66,20 +65,20 @@ class PlayerInteractEaselListener implements RegisteredListener {
         }
     }
 
-	@EventHandler
-	public void onRickClick(PlayerInteractEvent e) {
-		Player p = e.getPlayer();
-		Action a = e.getAction();
-		if ( a == Action.RIGHT_CLICK_AIR && e.getItem() != null
-				&& (ArtMaterial.getCraftItemType(e.getItem()) == ArtMaterial.PAINT_BRUSH)) {
-			ArtMap.instance().getScheduler().SYNC.run(() -> {
-				PlayerOpenMenuEvent event = new PlayerOpenMenuEvent(p);
-				Bukkit.getServer().getPluginManager().callEvent(event);
-				MenuHandler menuHandler = ArtMap.instance().getMenuHandler();
-				menuHandler.openMenu((p), menuHandler.MENU.HELP.get((p)));
-			});
-		}
-	}
+    @EventHandler
+    public void onRightClick(PlayerInteractEvent e) {
+        Player p = e.getPlayer();
+        Action a = e.getAction();
+        if (a == Action.RIGHT_CLICK_AIR && e.getItem() != null
+                && (ArtMaterial.getCraftItemType(e.getItem()) == ArtMaterial.PAINT_BRUSH)) {
+            ArtMap.instance().getScheduler().SYNC.run(() -> {
+                PlayerOpenMenuEvent event = new PlayerOpenMenuEvent(p);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                MenuHandler menuHandler = ArtMap.instance().getMenuHandler();
+                menuHandler.openMenu((p), menuHandler.MENU.HELP.get((p)));
+            });
+        }
+    }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -126,7 +125,7 @@ class PlayerInteractEaselListener implements RegisteredListener {
     }
 
     private boolean checkIsPainting(Player player, Cancellable event) {
-		if (player.isInsideVehicle() && ArtMap.instance().getArtistHandler().containsPlayer(player)) {
+        if (player.isInsideVehicle() && ArtMap.instance().getArtistHandler().containsPlayer(player)) {
             event.setCancelled(true);
             return true;
         }
@@ -154,7 +153,7 @@ class PlayerInteractEaselListener implements RegisteredListener {
         return false;
     }
 
-	@Override
+    @Override
     public void unregister() {
         PlayerInteractAtEntityEvent.getHandlerList().unregister(this);
         PlayerArmorStandManipulateEvent.getHandlerList().unregister(this);

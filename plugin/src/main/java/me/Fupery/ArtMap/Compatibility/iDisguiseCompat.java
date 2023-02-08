@@ -1,11 +1,10 @@
 package me.Fupery.ArtMap.Compatibility;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import io.netty.channel.Channel;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.api.Compatability.ReflectionHandler;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class iDisguiseCompat implements ReflectionHandler {
 

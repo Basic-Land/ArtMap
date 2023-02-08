@@ -1,16 +1,15 @@
 package me.Fupery.ArtMap.Command;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Easel.Easel;
 import me.Fupery.ArtMap.Painting.ArtSession;
 import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
 
 class CommandClear extends AsyncCommand {
 

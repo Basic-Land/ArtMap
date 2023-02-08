@@ -10,6 +10,9 @@ import me.Fupery.ArtMap.Painting.ArtistHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+
 import static me.Fupery.ArtMap.IO.Protocol.In.Packet.ArtistPacket.PacketInteract;
 import static me.Fupery.ArtMap.IO.Protocol.In.Packet.ArtistPacket.PacketInteract.InteractType;
 
@@ -40,9 +43,26 @@ public class ProtocolLibReceiver extends PacketReceiver {
             return new ArtistPacket.PacketArmSwing();
 
         } else if (packet.getType() == PacketType.Play.Client.USE_ENTITY) {
-            EnumWrappers.EntityUseAction action = packet.getEntityUseActions().read(0);
-            return new PacketInteract(
-                    action == EnumWrappers.EntityUseAction.ATTACK ? InteractType.ATTACK : InteractType.INTERACT);
+            try {
+                EnumWrappers.EntityUseAction action = packet.getEntityUseActions().read(0);
+                return new PacketInteract(
+                        action == EnumWrappers.EntityUseAction.ATTACK ? InteractType.ATTACK : InteractType.INTERACT);
+            } catch (Exception e) {
+                //Then we must be on 1.17+
+                try {
+                    Object enumEntityUseActionObject = packet.getModifier().read(1);
+                    Method method = enumEntityUseActionObject.getClass().getMethod("a");
+                    method.setAccessible(true);
+                    Object nmsAction = method.invoke(enumEntityUseActionObject);
+                    return new PacketInteract(
+                            nmsAction.toString().equals("ATTACK") ||    // 1.17.1
+                                    nmsAction.toString().equals("b") ?            // 1.17
+                                    InteractType.ATTACK : InteractType.INTERACT
+                    );
+                } catch (Exception e1) {
+                    ArtMap.instance().getLogger().log(Level.SEVERE, "Error reading USE_ENTITY packet!", e1);
+                }
+            }
         }
         return null;
     }

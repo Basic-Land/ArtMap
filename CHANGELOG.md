@@ -1,8 +1,26 @@
 # Changelog
 
+## Release 3.9.3
+
+* Fix - Placing Unfinished artwork back on the easel after it being broken off.
+* Fix - Newer MC versions need a Title or the annoucement silently fails causing artmap warnings not to show.
+
+## Release 3.9.2
+
+* Add 3 new colors added in 1.18.
+
+## Release 3.9.1
+
+* 1.18.1 Support - Basic testing done so make sure you have backups.
+
+## Release 3.9.0'
+
+* Gitlab CI - Automates the releases and testing to save me some time.
+* 3 JDK builds - Builds now available for JDK 8,16,17
+
 ## Release 3.8.1
 
-* Fix 1.13 /art menu failing to open
+* Fix 1.13 `/art menu` failing to open
 * Attempt to fix AnvilGUI errors by avoiding a class conflict with other plugins.
 * Paintbrush will no longer show in the recipe menu when disabled.
 * Fix a possible NPE if a player is in a mneu when an `/art reload` is called.
@@ -17,13 +35,14 @@
 * To reset a canvas on an easel use /art clear.
 * Restructure of plugin compatibility layer.
 * Add AFK prevention with Essentials and CMI. Controlled by artmap.prevent.afk. (Off by default)
-* Attempt to fix Factions UUID compatibility. (This and SabreFactions are going to be problematic as the use the same plugin name and versions)
+* Attempt to fix Factions UUID compatibility. (This and SabreFactions are going to be problematic as the use the same
+  plugin name and versions)
 * Fix an error that caused artwork to appear blank if it is loaded in the art menu before being seen in the world.
 * Fix a bug that allowed removal items from the help menu.
 * If artbrush is disabled it will no longer show in menu.
 * Artists menu paging is now much quicker (especially with a large number of artists).
 * A few more translation fixes. (Sponge and others)
-* There is now a MENU_HEADER.  This can be translated but must exist and be unique or the Artmap menus will break.
+* There is now a MENU_HEADER. This can be translated but must exist and be unique or the Artmap menus will break.
 
 ## Release 3.7.2
 
@@ -35,10 +54,10 @@
 
 * /art help now prints something useful
 * Add traslatable strings for:
-  * "by" in search text
-  * "of" in search text
-  * Sponge color pickup message
-  * Dyes for Painting help menu
+    * "by" in search text
+    * "of" in search text
+    * Sponge color pickup message
+    * Dyes for Painting help menu
 * Fix adding of untranslated text to lang.yml
 * Fix a bit of miscoloring in the search text
 * Make unit tests a bit more consistent
@@ -74,17 +93,17 @@
 
 ## Release 3.6.3
 
-* Remove "hide prefix" option.  It was broken and a pain to mantain.
+* Remove "hide prefix" option. It was broken and a pain to mantain.
 * Fix Towny dependency pom.
 * Fix Towny compat loading error.
 * Update AnvilGUI dependency for 1.16.2
-* Remove admin skip of build check.  It doesn't work since the other plugins will still block the build.
+* Remove admin skip of build check. It doesn't work since the other plugins will still block the build.
 * Attempt to fix UnsupportedOperationException from ProtocolLib.
 * Fix PlotSquared placing signs on road when an easel place is denied.  (Added special check for Roads.)
 
 ## Release 3.6.2
 
-* Fix compatibility version check.  Should stop PlotSquared4 from thorwing a ClassNotFoundException.
+* Fix compatibility version check. Should stop PlotSquared4 from thorwing a ClassNotFoundException.
 
 ## Release 3.6.1
 
@@ -111,7 +130,8 @@
 * Fix generic error message not being in the right file.
 * Fix SQLException showing up instead of warning the player about duplicate title in the case of using a copied artwork.
 * Dont kick the player off the easel if the save fails.
-* Better catch exceptions in Compatibility handling so the plugin loads even with the compatibility hook failing to load.
+* Better catch exceptions in Compatibility handling so the plugin loads even with the compatibility hook failing to
+  load.
 * Fix null pointer on some head loading
 * Only warn once about head cache not being fully loaded.
 
@@ -143,7 +163,7 @@
 
 ## Release 3.4.3
 
-* Fix Head retrieval.  The JSON response reading didn't handle newlines at all and mojang appears to have added one.
+* Fix Head retrieval. The JSON response reading didn't handle newlines at all and mojang appears to have added one.
 
 ## Release 3.4.2
 
@@ -152,9 +172,10 @@
 
 ## Release 3.4.1
 
-* Make import delay configurable.  Add importDelay to config.yml default is 100.
+* Make import delay configurable. Add importDelay to config.yml default is 100.
 * Prevent /art break from clearing saved artwork.
-  * This fixes a rare case where if there is a server crash after artwork is saved causing it to be placed back on the easel breaking it deleted (blanked) the saved artwork.
+    * This fixes a rare case where if there is a server crash after artwork is saved causing it to be placed back on the
+      easel breaking it deleted (blanked) the saved artwork.
 * Start adding some unit tests
 
 ## Release 3.4.0
@@ -168,7 +189,8 @@
 
 ## Release 3.3.10
 
-* Prevent players in artkit from picking up items. Prevents loss of items thrown to a player while they are using artkit.
+* Prevent players in artkit from picking up items. Prevents loss of items thrown to a player while they are using
+  artkit.
 
 ## Release 3.3.9
 
@@ -195,9 +217,10 @@
 
 ## Release 3.3.3
 
-* Fixed an issue where a server with over 32768 maps would cause a short overflow and try and load negative map IDs which would fail.
+* Fixed an issue where a server with over 32768 maps would cause a short overflow and try and load negative map IDs
+  which would fail.
 * Removed initial artwork checks from startup as they were slow on large numbers of artwork
-  * Those checks now run on map load so keep an eye on timings of MapInitializeEvent
+    * Those checks now run on map load so keep an eye on timings of MapInitializeEvent
 
 ## Release 3.3.2
 
@@ -207,8 +230,8 @@
 ## Release 3.3.1
 
 * Artkit now saves hotbar during current login session.
-  * This works across different easels.
-  * Clears on logout or server restart in case something breaks.
+    * This works across different easels.
+    * Clears on logout or server restart in case something breaks.
 * Eye Dropper now prints out base dye plus the byte code for easier shade matching on other eisels.
 * Fixed mismatch by making Coarse Dirt -> Podzol.
 
@@ -216,25 +239,28 @@
 
 ### Major Changes
 
-* Paint Bukkit is no longer craftable.  
-  * Instead use a regular bukkit in the main hand the dye you want to fill with in the offhand.
-  * There have been too many exploits with the crafting of paint bukkets and duplicating items this neatly removes that problem.
-  * Now allows players in creative mode to more easily use paint buckets without leaving the easel to craft them.
+* Paint Bukkit is no longer craftable.
+    * Instead use a regular bukkit in the main hand the dye you want to fill with in the offhand.
+    * There have been too many exploits with the crafting of paint bukkets and duplicating items this neatly removes
+      that problem.
+    * Now allows players in creative mode to more easily use paint buckets without leaving the easel to craft them.
 * Added Eye Dropper Tool.
-  * Using a sponge left click the colour you would like to pick up. Then right click to draw with the color.
-  * Allows easy copy of shades.
-  * Usable with the paint bucket to fill with a shade.
+    * Using a sponge left click the colour you would like to pick up. Then right click to draw with the color.
+    * Allows easy copy of shades.
+    * Usable with the paint bucket to fill with a shade.
 * Admin's can now right click dyes in the dye menu to receive a copy of the dye.
-* Players can now obtain a copy of their own artwork by right clicking on it in the preview menu.  It cost them one empty map just like using a crafting table would.
+* Players can now obtain a copy of their own artwork by right clicking on it in the preview menu. It cost them one empty
+  map just like using a crafting table would.
 
 ### Minor Changes
 
 * Lots of cleanup to the English Language file.
-  * Try to make sure tooltips won't go off screen even on huge GUI configurations.
-  * Made more text able to be changed via the language files.
-  * If you are using a custom lang.yml I suggest comparing to the new lang.yml to pickup changes.
-  * If anyone has updates to the other languages files please sumbit an issue and I will have the updated or added as soon as possible.
+    * Try to make sure tooltips won't go off screen even on huge GUI configurations.
+    * Made more text able to be changed via the language files.
+    * If you are using a custom lang.yml I suggest comparing to the new lang.yml to pickup changes.
+    * If anyone has updates to the other languages files please sumbit an issue and I will have the updated or added as
+      soon as possible.
 * Fixed help menu back buttons sometimes being invisible.
 * Fixed a few duplication and stealing from artkit bugs.
 * Add '/art break' if a player really wants to break and easel and reset the artwork.
-  * Prevents accidental easel breaks.
+    * Prevents accidental easel breaks.

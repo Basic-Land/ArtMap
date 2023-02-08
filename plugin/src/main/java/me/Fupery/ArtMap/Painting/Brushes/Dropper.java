@@ -1,19 +1,18 @@
 package me.Fupery.ArtMap.Painting.Brushes;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Painting.Brush;
+import me.Fupery.ArtMap.Painting.CachedPixel;
+import me.Fupery.ArtMap.Painting.CanvasRenderer;
+import me.Fupery.ArtMap.api.Colour.ArtDye;
+import me.Fupery.ArtMap.api.Config.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
-import me.Fupery.ArtMap.Painting.Brush;
-import me.Fupery.ArtMap.Painting.CachedPixel;
-import me.Fupery.ArtMap.Painting.CanvasRenderer;
-import me.Fupery.ArtMap.api.Colour.ArtDye;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dropper extends Brush {
     private ArrayList<CachedPixel> dirtyPixels;
@@ -31,8 +30,8 @@ public class Dropper extends Brush {
             byte[] pixel = getCurrentPixel();
             if (pixel != null) {
                 dye = getPixelAt(pixel[0], pixel[1]).getColour();
-                ArtDye artdye =  ArtMap.instance().getDyePalette().getDye(dye);
-                Bukkit.getScheduler().runTask(ArtMap.instance(), ()->{
+                ArtDye artdye = ArtMap.instance().getDyePalette().getDye(dye);
+                Bukkit.getScheduler().runTask(ArtMap.instance(), () -> {
                     this.player.sendMessage(Lang.ITEM_SPONGE_MESSAGE.get() + ": " + artdye.name() + " :: " + artdye.getMaterial().name() + " :: " + dye);
                 });
             }
@@ -59,17 +58,18 @@ public class Dropper extends Brush {
                         return dirtyPixels;
                     }
                 }
-                getPixelAt(pixel[0], pixel[1]).setColour(dye);;
+                getPixelAt(pixel[0], pixel[1]).setColour(dye);
+                ;
                 dirtyPixels.add(new CachedPixel(pixel[0], pixel[1], dye));
             }
         }
         return dirtyPixels;
     }
 
-    public Byte getColour() { 
+    public Byte getColour() {
         return this.dye;
     }
- 
+
     @Override
     public boolean checkMaterial(ItemStack brush) {
         return brush.getType() == Material.SPONGE;

@@ -1,14 +1,12 @@
 package me.Fupery.ArtMap.Compatibility.impl;
 
-import java.util.logging.Level;
-
 import com.Zrips.CMI.events.CMIAfkKickEvent;
-
+import me.Fupery.ArtMap.api.Compatability.EventListener;
+import me.Fupery.ArtMap.api.IArtMap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
-import me.Fupery.ArtMap.api.IArtMap;
-import me.Fupery.ArtMap.api.Compatability.EventListener;
+import java.util.logging.Level;
 
 public class CMICompat implements EventListener {
     private boolean loaded = false;
@@ -25,8 +23,8 @@ public class CMICompat implements EventListener {
     public void onAFKKickEvent(CMIAfkKickEvent event) {
         try {
             Player player = event.getPlayer();
-            if(artmap.getArtistHandler().containsPlayer(player) && player.hasPermission("artmap.ignore.afk")) {
-                    event.setCancelled(true);
+            if (artmap.getArtistHandler().containsPlayer(player) && player.hasPermission("artmap.ignore.afk")) {
+                event.setCancelled(true);
             }
         } catch (Exception e) {
             artmap.getLogger().log(Level.SEVERE, "Error interteracting with MarriageMaster!", e);

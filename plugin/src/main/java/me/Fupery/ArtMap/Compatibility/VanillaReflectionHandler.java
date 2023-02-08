@@ -3,7 +3,6 @@ package me.Fupery.ArtMap.Compatibility;
 import io.netty.channel.Channel;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.api.Compatability.ReflectionHandler;
-
 import org.bukkit.entity.Player;
 
 public class VanillaReflectionHandler implements ReflectionHandler {

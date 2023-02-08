@@ -16,7 +16,7 @@ public class DuplicateArtworkException extends ArtMapException {
     }
 
     public DuplicateArtworkException(String msg, Throwable exception) {
-        super(msg,exception);
+        super(msg, exception);
     }
 
 }

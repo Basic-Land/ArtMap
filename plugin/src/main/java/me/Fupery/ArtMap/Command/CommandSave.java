@@ -1,14 +1,6 @@
 package me.Fupery.ArtMap.Command;
 
-import java.util.logging.Level;
-
-import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.api.Config.Lang;
 import me.Fupery.ArtMap.Easel.Canvas;
 import me.Fupery.ArtMap.Easel.Easel;
 import me.Fupery.ArtMap.Easel.EaselEffect;
@@ -17,6 +9,13 @@ import me.Fupery.ArtMap.Exception.PermissionException;
 import me.Fupery.ArtMap.IO.MapArt;
 import me.Fupery.ArtMap.IO.TitleFilter;
 import me.Fupery.ArtMap.Utils.ItemUtils;
+import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.logging.Level;
 
 class CommandSave extends AsyncCommand {
 
@@ -33,7 +32,7 @@ class CommandSave extends AsyncCommand {
             Lang.PAINTBRUSH_FORCED.send(sender);
             return;
         }
-        if(args.length<2) {
+        if (args.length < 2) {
             Lang.SAVE_USAGE.send(sender);
             return;
         }

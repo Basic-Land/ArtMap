@@ -1,21 +1,20 @@
 package me.Fupery.ArtMap.Command;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
+import me.Fupery.ArtMap.Menu.API.TextPagination;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.Fupery.ArtMap.Menu.API.TextPagination;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Page command handles pagination requests from other commands.
  */
 public class Page extends AsyncCommand {
 
-    private static Map<UUID,TextPagination> pageMap = new HashMap<>();
+    private static Map<UUID, TextPagination> pageMap = new HashMap<>();
 
     Page() {
         //artmap page <playerid> <page>
@@ -40,18 +39,18 @@ public class Page extends AsyncCommand {
         try {
             playerId = UUID.fromString(args[1]);
             pageNum = Integer.parseInt(args[2]);
-        } catch(Exception e) {
+        } catch (Exception e) {
             msg.message = "Command format incorrect.";
         }
 
         Player player = Bukkit.getPlayer(playerId);
-        if(player == null) {
+        if (player == null) {
             msg.message = "Player not found.";
             return;
         }
 
         TextPagination pages = pageMap.get(playerId);
-        if(pages == null) {
+        if (pages == null) {
             msg.message = "Pagination for this player has expired.";
             return;
         }

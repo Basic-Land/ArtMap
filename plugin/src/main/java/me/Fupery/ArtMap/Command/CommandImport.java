@@ -1,5 +1,14 @@
 package me.Fupery.ArtMap.Command;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
+import me.Fupery.ArtMap.api.Config.Lang;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,17 +19,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.Command.CommandExport.ArtworkExport;
-import me.Fupery.ArtMap.api.Config.Lang;
 
 class CommandImport extends AsyncCommand {
 
@@ -47,27 +45,27 @@ class CommandImport extends AsyncCommand {
 
         // get the import file name
         switch (args[1]) {
-        case "-all":
-            importFilename = args[2];
-            break;
-        case "-artist":
-        case "-title":
-            if (args.length < 4) {
+            case "-all":
+                importFilename = args[2];
+                break;
+            case "-artist":
+            case "-title":
+                if (args.length < 4) {
+                    // TODO: need usage
+                    msg.message = Lang.COMMAND_EXPORT.get();
+                    return;
+                }
+                importFilename = args[3];
+                break;
+            default:
                 // TODO: need usage
                 msg.message = Lang.COMMAND_EXPORT.get();
                 return;
-            }
-            importFilename = args[3];
-            break;
-        default:
-            // TODO: need usage
-            msg.message = Lang.COMMAND_EXPORT.get();
-            return;
         }
 
         File importFile = new File(ArtMap.instance().getDataFolder(), importFilename);
-        if(!importFile.exists()) {
-            importFilename+=".json";
+        if (!importFile.exists()) {
+            importFilename += ".json";
         }
         //add .json and look again
         importFile = new File(ArtMap.instance().getDataFolder(), importFilename);
@@ -88,62 +86,62 @@ class CommandImport extends AsyncCommand {
 
         sender.sendMessage(MessageFormat.format("{0} artworks available for import.", artToImport.size()));
         switch (args[1]) {
-        case "-all":
-            this.delayedImport(sender,artToImport);
-            break;
-        case "-artist":
-            if (args.length < 4) {
-                // TODO: need usage
-                msg.message = Lang.COMMAND_EXPORT.get();
-                return;
-            }
-            List<ArtworkExport> byArtist = new LinkedList<>();
-            try {
-                UUID id = UUID.fromString(args[2]);
-                byArtist = artToImport.stream().filter(art -> {
-                    return art.getArtist().equals(id);
-                }).collect(Collectors.toList());
-            } catch (Exception exp) {
-                // its a name then
-                Player p = Bukkit.getPlayer(args[2]);
-                if(p==null) {
-                    if(sender != null) {
-                        sender.sendMessage("Player not found! :: " + args[2]);
-                        return;
-                    }
+            case "-all":
+                this.delayedImport(sender, artToImport);
+                break;
+            case "-artist":
+                if (args.length < 4) {
+                    // TODO: need usage
+                    msg.message = Lang.COMMAND_EXPORT.get();
+                    return;
                 }
-                byArtist = artToImport.stream().filter(art -> {
-                    return art.getArtist().equals(p.getUniqueId());
+                List<ArtworkExport> byArtist = new LinkedList<>();
+                try {
+                    UUID id = UUID.fromString(args[2]);
+                    byArtist = artToImport.stream().filter(art -> {
+                        return art.getArtist().equals(id);
+                    }).collect(Collectors.toList());
+                } catch (Exception exp) {
+                    // its a name then
+                    Player p = Bukkit.getPlayer(args[2]);
+                    if (p == null) {
+                        if (sender != null) {
+                            sender.sendMessage("Player not found! :: " + args[2]);
+                            return;
+                        }
+                    }
+                    byArtist = artToImport.stream().filter(art -> {
+                        return art.getArtist().equals(p.getUniqueId());
+                    }).collect(Collectors.toList());
+                }
+                this.delayedImport(sender, byArtist);
+                break;
+            case "-title":
+                if (args.length < 4) {
+                    // TODO: need usage
+                    msg.message = Lang.COMMAND_EXPORT.get();
+                    return;
+                }
+                String title = args[2];
+                List<ArtworkExport> byTitle = artToImport.stream().filter(art -> {
+                    return art.getTitle().equals(title);
                 }).collect(Collectors.toList());
-            }
-            this.delayedImport(sender,byArtist);
-            break;
-        case "-title":
-            if (args.length < 4) {
+                this.delayedImport(sender, byTitle);
+                break;
+            default:
                 // TODO: need usage
                 msg.message = Lang.COMMAND_EXPORT.get();
                 return;
-            }
-            String title = args[2];
-            List<ArtworkExport> byTitle = artToImport.stream().filter(art -> {
-                return art.getTitle().equals(title);
-            }).collect(Collectors.toList());
-            this.delayedImport(sender,byTitle);
-            break;
-        default:
-            // TODO: need usage
-            msg.message = Lang.COMMAND_EXPORT.get();
-            return;
         }
-        sender.sendMessage("Import complete.");
+        sender.sendMessage("Import complete. Check the console for errors.");
     }
 
     //Slows the import down a bit to keep from lagging the main thread (10 per second)
-    private void delayedImport(CommandSender sender,List<ArtworkExport> arts) {
+    private void delayedImport(CommandSender sender, List<ArtworkExport> arts) {
         long delayConfig = ArtMap.instance().getConfig().getInt("importDelay");
-        ArtMap.instance().getLogger().info("Delay="+delayConfig);
+        ArtMap.instance().getLogger().info("Delay=" + delayConfig);
         //0 if not set so move to 100 default
-        final long delay = delayConfig<=0 ? 100 : delayConfig;
+        final long delay = delayConfig <= 0 ? 100 : delayConfig;
         Bukkit.getScheduler().runTaskAsynchronously(ArtMap.instance(), () -> {
             arts.forEach(art -> {
                 try {

@@ -1,12 +1,11 @@
 package me.Fupery.ArtMap.Listeners;
 
-import java.util.logging.Level;
-
+import me.Fupery.ArtMap.ArtMap;
+import me.Fupery.ArtMap.IO.Database.Map;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.MapInitializeEvent;
 
-import me.Fupery.ArtMap.ArtMap;
-import me.Fupery.ArtMap.IO.Database.Map;
+import java.util.logging.Level;
 
 public class MapInitializeListener implements RegisteredListener {
 

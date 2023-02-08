@@ -1,17 +1,16 @@
 package me.Fupery.ArtMap.Painting.Brushes;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Painting.Brush;
 import me.Fupery.ArtMap.Painting.CachedPixel;
 import me.Fupery.ArtMap.Painting.CanvasRenderer;
 import me.Fupery.ArtMap.api.Colour.ArtDye;
 import me.Fupery.ArtMap.api.Colour.Palette;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dye extends Brush {
     private ArrayList<CachedPixel> dirtyPixels;
@@ -69,7 +68,7 @@ public class Dye extends Brush {
     private byte resultColor(ArtDye dye, int x, int y) {
         return dye.getDyeColour(this.getPixel(x, y));
     }
- 
+
     @Override
     public boolean checkMaterial(ItemStack brush) {
         return palette.getDye(brush) != null;
@@ -114,7 +113,7 @@ public class Dye extends Brush {
         int numerator = longest >> 1;
 
         for (int i = 0; i <= longest; i++) {
-            if (!dirtyPixels.contains(new CachedPixel(x, y, this.resultColor(dye, x,y)))) {
+            if (!dirtyPixels.contains(new CachedPixel(x, y, this.resultColor(dye, x, y)))) {
                 dye.apply(getPixelAt(x, y));
             }
             numerator += shortest;

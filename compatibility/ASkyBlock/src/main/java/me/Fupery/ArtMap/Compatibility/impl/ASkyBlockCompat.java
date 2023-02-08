@@ -2,18 +2,16 @@ package me.Fupery.ArtMap.Compatibility.impl;
 
 import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import com.wasteofplastic.askyblock.Island;
-
+import me.Fupery.ArtMap.api.Compatability.RegionHandler;
+import me.Fupery.ArtMap.api.Easel.ClickType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.Fupery.ArtMap.api.Compatability.RegionHandler;
-import me.Fupery.ArtMap.api.Easel.ClickType;
-
 public class ASkyBlockCompat implements RegionHandler {
-    private ASkyBlockAPI api = null;
     private final boolean loaded;
+    private ASkyBlockAPI api = null;
 
     public ASkyBlockCompat() {
         api = ASkyBlockAPI.getInstance();
@@ -26,7 +24,7 @@ public class ASkyBlockCompat implements RegionHandler {
         return island == null
                 || (island.getOwner() == player.getUniqueId()
                 || island.getMembers().contains(player.getUniqueId())
-						|| island.getIgsFlag(Island.SettingsFlag.PLACE_BLOCKS));
+                || island.getIgsFlag(Island.SettingsFlag.PLACE_BLOCKS));
     }
 
     @Override
@@ -35,7 +33,7 @@ public class ASkyBlockCompat implements RegionHandler {
         return island == null
                 || (island.getOwner() == player.getUniqueId()
                 || island.getMembers().contains(player.getUniqueId())
-						|| island.getIgsFlag(Island.SettingsFlag.ARMOR_STAND));
+                || island.getIgsFlag(Island.SettingsFlag.ARMOR_STAND));
     }
 
     @Override

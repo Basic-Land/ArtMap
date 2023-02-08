@@ -1,17 +1,16 @@
 package me.Fupery.ArtMap.Painting.Brushes;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.Painting.Brush;
 import me.Fupery.ArtMap.Painting.CachedPixel;
 import me.Fupery.ArtMap.Painting.CanvasRenderer;
 import me.Fupery.ArtMap.api.Colour.ArtDye;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Fill extends Brush {
     private final ArrayList<CachedPixel> lastFill;
@@ -30,18 +29,18 @@ public class Fill extends Brush {
     public List<CachedPixel> paint(BrushAction action, ItemStack bucket, long strokeTime) {
 
         if (action == BrushAction.LEFT_CLICK) {
-            ArtDye colour =ArtMap.instance().getDyePalette().getDye(this.player.getInventory().getItemInOffHand());
+            ArtDye colour = ArtMap.instance().getDyePalette().getDye(this.player.getInventory().getItemInOffHand());
 
             //handle fill with sponge in offhand
-            if(colour == null) {
+            if (colour == null) {
                 ItemStack offhand = this.player.getInventory().getItemInOffHand();
-                if(dropper.checkMaterial(offhand) && dropper.getColour() != null) {
+                if (dropper.checkMaterial(offhand) && dropper.getColour() != null) {
                     clean();
                     fillPixel(dropper.getColour());
                     return this.lastFill;
                 }
             }
-            
+
             if (colour != null) {
                 clean();
                 fillPixel(colour);

@@ -10,23 +10,15 @@
 
     <parent>
         <groupId>com.gitlab.blockstack</groupId>
-        <artifactId>bArtMap-parent</artifactId>
-        <version>3.8.1-SNAPSHOT</version>
+        <artifactId>ArtMap-parent</artifactId>
+        <version>3.9.8</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
-    <repositories>
-        <repository>
-            <id>IntellectualSites</id>
-            <url>https://mvn.intellectualsites.com/content/groups/public/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.gitlab.blockstack</groupId>
-            <artifactId>bArtMap-api</artifactId>
-            <version>3.8.1-SNAPSHOT</version>
+            <artifactId>ArtMap-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -37,7 +29,9 @@
         <dependency>
             <groupId>com.plotsquared</groupId>
             <artifactId>PlotSquared-Core</artifactId>
-            <version>5.13.0</version>
+            <version>5.13.11</version>
+            <systemPath>${project.basedir}/dependencies/PlotSquared-Core-5.13.11.jar</systemPath>
+            <scope>system</scope>
         </dependency>
     </dependencies>
 </project>

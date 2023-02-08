@@ -1,12 +1,6 @@
 package me.Fupery.ArtMap;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
+import me.Fupery.ArtMap.mocks.MockUtil;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -17,7 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import me.Fupery.ArtMap.mocks.MockUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 public class ArtMapTest {
 
@@ -26,7 +25,7 @@ public class ArtMapTest {
     @Before
     public void setup() throws Exception {
         this.mocks = new MockUtil();
-        this.mocks.mockServer("1.15.2-R0.1-MOCK");
+        this.mocks.mockServer("1.14.4-R0.1-MOCK");
     }
 
     @Test
@@ -34,7 +33,7 @@ public class ArtMapTest {
         //Bukkit Server Mock
         Server mockServer = this.mocks.getMockServer();
 
-        @SuppressWarnings( "deprecation" )
+        @SuppressWarnings("deprecation")
         JavaPluginLoader loader = new JavaPluginLoader(mockServer);
 
         File pluginYml = new File(getClass().getResource("/plugin.yml").getPath());
@@ -44,14 +43,14 @@ public class ArtMapTest {
         datafolder.mkdirs();
 
         //Test Artmap enable
-        ArtMap artmap = new ArtMap(loader,desc,datafolder,null);
+        ArtMap artmap = new ArtMap(loader, desc, datafolder, null);
         //spy the getCommand to come back with a mock
         artmap = Mockito.spy(artmap);
         Mockito.doReturn(mock(PluginCommand.class)).when(artmap).getCommand(any(String.class));
 
-        Assert.assertNotNull("Artmap instnace null!",artmap);
+        Assert.assertNotNull("Artmap instnace null!", artmap);
         artmap.onEnable();
-        Assert.assertNotNull("Artmap failed to enable.",ArtMap.instance());
+        Assert.assertNotNull("Artmap failed to enable.", ArtMap.instance());
     }
 
     //Test artwork recycle does not delete map that is a completed artwork

@@ -1,11 +1,11 @@
 package me.Fupery.ArtMap.Painting;
 
-import java.util.Arrays;
-
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+
+import java.util.Arrays;
 
 public class GenericMapRenderer extends MapRenderer {
 

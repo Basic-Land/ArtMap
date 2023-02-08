@@ -15,7 +15,7 @@ public class ArtMapSQLException extends ArtMapException {
     }
 
     public ArtMapSQLException(String msg, Throwable exception) {
-        super(msg,exception);
+        super(msg, exception);
     }
 
 }

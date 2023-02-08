@@ -1,20 +1,19 @@
 package me.Fupery.ArtMap.Utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapView;
-
 import io.netty.channel.Channel;
 import me.Fupery.ArtMap.ArtMap;
 import me.Fupery.ArtMap.IO.Protocol.In.Packet.ArtistPacket;
 import me.Fupery.ArtMap.IO.Protocol.In.Packet.PacketType;
 import me.Fupery.ArtMap.api.Utils.VersionHandler.BukkitVersion;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.map.MapView;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.logging.Level;
 
 public class Reflection {
 
@@ -177,10 +176,14 @@ public class Reflection {
 
         try {
             Object worldMap = getField(mapView, "worldMap");
-            colors = (byte[]) getField(worldMap, "colors");
-
+            try {
+                colors = (byte[]) getField(worldMap, "colors");
+            } catch (NoSuchFieldException e) {
+                //Then we must be on 1.17
+                colors = (byte[]) getField(worldMap, "g");
+            }
         } catch (NoSuchFieldException | SecurityException
-                | IllegalArgumentException | IllegalAccessException e) {
+                 | IllegalArgumentException | IllegalAccessException e) {
             colors = null;
         }
         if (colors == null) {
@@ -190,12 +193,17 @@ public class Reflection {
     }
 
     public void setWorldMap(MapView mapView, byte[] colors) throws NoSuchFieldException, IllegalAccessException {
-            mapView.setCenterX(-999999);
-            mapView.setCenterZ(-999999);
-            
-            Object worldMap = getField(mapView, "worldMap");
-            setField(worldMap, "colors", colors);
+        mapView.setCenterX(-999999);
+        mapView.setCenterZ(-999999);
 
-            mapView.setScale(MapView.Scale.FARTHEST);
+        Object worldMap = getField(mapView, "worldMap");
+        try {
+            setField(worldMap, "colors", colors);
+        } catch (NoSuchFieldException e) {
+            //Then we must be on 1.17
+            setField(worldMap, "g", colors);
+        }
+
+        mapView.setScale(MapView.Scale.FARTHEST);
     }
 }
