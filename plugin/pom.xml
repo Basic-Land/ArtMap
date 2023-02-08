@@ -265,32 +265,6 @@
             <version>5.8.2</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Tests -->
-        <!-- Where does this come from in NMS? -->
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>4.1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.12.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <scm>
         <url>https://gitlab.com/BlockStack/ArtMap</url>
