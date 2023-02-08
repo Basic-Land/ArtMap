@@ -82,6 +82,10 @@
             <name>Mojang's Repository</name>
             <url>https://libraries.minecraft.net/</url>
         </repository>
+        <repository>
+            <id>elmakers-repo</id>
+            <url>https://maven.elmakers.com/repository/</url>
+        </repository>
     </repositories>
 
     <dependencies>
